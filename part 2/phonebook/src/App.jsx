@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const Filter = ( {pattern, filter }) => {
   return (
@@ -31,7 +32,7 @@ const Persons = ( {pattern, persons, handleFilteredName} ) => {
       {pattern === '' 
       ? persons.map((person, index) => (
         <div key={index}>
-          {person.name} {person.phone}
+          {person.name} {person.number}
         </div>
       ))
         : <div>{handleFilteredName(pattern, persons)}</div>
@@ -41,19 +42,23 @@ const Persons = ( {pattern, persons, handleFilteredName} ) => {
 }
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', phone: '12-34-5689', id:1 },
-    { name: 'Ada Lovelace', phone: '39-44-5213', id: 2},
-    { name: 'Dan Abramov', phone: '12-43-234345', id: 3},
-    { name: 'Mary Poppendieck', phone: '39-23-6341', id: 4},
-  ])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newPhoneNumber, setNewPhoneNumber] = useState('dd-dd-dddd')
   const [pattern, setNewPattern] = useState('')
 
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log('%cApp.jsx line:54 response.data', 'color: #007acc;', response.data);
+        setPersons(response.data)
+      })
+  }, [])
+
   const addName = (event) => {
     event.preventDefault() 
-    const newObj = {name: newName, phone: newPhoneNumber}
+    const newObj = {name: newName, number: newPhoneNumber}
     if (persons.find( (obj) => JSON.stringify(obj) === JSON.stringify(newObj))) {
       alert(`${newObj.name} is already added to phonebook`)
     } 
