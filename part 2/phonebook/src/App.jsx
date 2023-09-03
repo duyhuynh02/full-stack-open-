@@ -26,16 +26,16 @@ const PersonForm = (props) => {
   )
 }
 
-const Persons = ( {pattern, persons, handleFilteredName} ) => {
+const Persons = ( {pattern, persons, handleFilteredName, handlePersonDelete} ) => {
   return (
     <div> 
       {pattern === '' 
       ? persons.map((person, index) => (
         <div key={index}>
-          {person.name} {person.number}
+          {person.name} {person.number} <button onClick={() => handlePersonDelete(person, person.id)}>delete</button>
         </div>
       ))
-        : <div>{handleFilteredName(pattern, persons)}</div>
+        : <div>{handleFilteredName(pattern, persons, handlePersonDelete)}</div>
       }
     </div>
   )
@@ -82,12 +82,29 @@ const App = () => {
     setNewPattern(event.target.value)
   }
 
-  const handleFilteredName = (pattern, listOfObjects) => {
+  const handleFilteredName = (pattern, listOfObjects, handlePersonDelete) => {
     pattern = pattern.toUpperCase()
     const filteredPersonList = listOfObjects.filter(obj => obj.name.toUpperCase().includes(pattern))
-    return filteredPersonList.map((person, index) => <div key={index}> {person.name} {person.phone}</div>)
+    return filteredPersonList.map((person, index) => <div 
+                                              key={index}> 
+                                                  {person.name} 
+                                                  {person.phone}
+                                                           </div>)
   }
 
+  const handlePersonDelete = (person, id) => {
+    console.log(`Check if it works here ` + id)
+    if (window.confirm(`Delete this person: ${person.name}?`)) {
+      noteService
+      .remove(id)
+      .then(() => {
+        //if the deletion is successul, update the state of array persons
+        const updatedPersons = persons.filter(person => person.id !== id)
+        setPersons(updatedPersons)
+    }
+  )
+  }
+}
 
   return (
     <div>
@@ -97,7 +114,8 @@ const App = () => {
       <PersonForm newName={newName} newPhoneNumber={newPhoneNumber} addName={addName}
                       handleNewName={handleNewName} handleNewPhoneNumber={handleNewPhoneNumber} /> 
       <h3>Numbers</h3>
-      <Persons pattern={pattern} persons={persons} handleFilteredName={handleFilteredName}/>
+      <Persons pattern={pattern} persons={persons} 
+          handleFilteredName={handleFilteredName} handlePersonDelete={handlePersonDelete}/>
     </div>
 
   )
