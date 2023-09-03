@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import noteService from './services/notes'
 
 const Filter = ( {pattern, filter }) => {
   return (
@@ -48,8 +48,8 @@ const App = () => {
   const [pattern, setNewPattern] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
+    noteService
+      .getAll()
       .then(response => {
         setPersons(response.data)
       })
@@ -62,9 +62,8 @@ const App = () => {
       alert(`${newObj.name} is already added to phonebook`)
     } 
     else {
-      axios
-        .post('http://localhost:3001/persons', newObj)
-        // .catch(error => { console.log('add failed') })
+      noteService
+        .create(newObj)
       setPersons([...persons, newObj])
     }
     setNewName('')
