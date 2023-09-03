@@ -51,7 +51,6 @@ const App = () => {
     axios
       .get('http://localhost:3001/persons')
       .then(response => {
-        console.log('%cApp.jsx line:54 response.data', 'color: #007acc;', response.data);
         setPersons(response.data)
       })
   }, [])
@@ -63,6 +62,9 @@ const App = () => {
       alert(`${newObj.name} is already added to phonebook`)
     } 
     else {
+      axios
+        .post('http://localhost:3001/persons', newObj)
+        // .catch(error => { console.log('add failed') })
       setPersons([...persons, newObj])
     }
     setNewName('')
