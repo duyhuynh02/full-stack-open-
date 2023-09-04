@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import noteService from './services/notes'
+import Notification from './services/notification'
+import './index.css'
 
 const Filter = ( {pattern, filter }) => {
   return (
@@ -46,6 +48,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newPhoneNumber, setNewPhoneNumber] = useState('dd-dd-dddd')
   const [pattern, setNewPattern] = useState('')
+  const [errorMessage, setErrorMessage] = useState('lets test it first')
 
   useEffect(() => {
     noteService
@@ -68,6 +71,11 @@ const App = () => {
     else {
       noteService
         .create(newObj)
+        //This one 
+        setErrorMessage(`The new name ${newObj.name} just added`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
       setPersons([...persons, newObj])
     }
     setNewName('')
@@ -104,6 +112,10 @@ const App = () => {
         //if the deletion is successul, update the state of array persons
         const updatedPersons = persons.filter(person => person.id !== id)
         setPersons(updatedPersons)
+        setErrorMessage(`The person ${person.name} just removed`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
     }
   )
   }
@@ -128,12 +140,17 @@ const App = () => {
         .catch(error => {
           console.log('Error making PUT request: ', error)
         })
+        setErrorMessage(`The new phone of ${newObject.name} just added`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
   }
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage}/>
       <Filter pattern={pattern} filter={handleNewPattern}/>
       <h3>add a new</h3>
       <PersonForm newName={newName} newPhoneNumber={newPhoneNumber} addName={addName}
