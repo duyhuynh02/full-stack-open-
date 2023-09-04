@@ -53,13 +53,17 @@ const App = () => {
       .then(response => {
         setPersons(response.data)
       })
+      .catch(error => {
+        console.log('Error making GET request: ', error)
+      })
   }, [])
 
   const addName = (event) => {
     event.preventDefault() 
     const newObj = {name: newName, number: newPhoneNumber}
-    if (persons.find( (obj) => JSON.stringify(obj) === JSON.stringify(newObj))) {
-      alert(`${newObj.name} is already added to phonebook`)
+    if (persons.find( (obj) => JSON.stringify(obj.name) === JSON.stringify(newObj.name))) {
+      let oldPersonList = persons.filter(person => JSON.stringify(person.name) === JSON.stringify(newObj.name))
+      handleUpdateExistedName(newObj, oldPersonList[0].id) 
     } 
     else {
       noteService
@@ -85,15 +89,14 @@ const App = () => {
   const handleFilteredName = (pattern, listOfObjects, handlePersonDelete) => {
     pattern = pattern.toUpperCase()
     const filteredPersonList = listOfObjects.filter(obj => obj.name.toUpperCase().includes(pattern))
-    return filteredPersonList.map((person, index) => <div 
-                                              key={index}> 
-                                                  {person.name} 
-                                                  {person.phone}
-                                                           </div>)
+    return filteredPersonList.map((person, index) => <div key={index}> 
+                                                  {person.name} {person.number}  
+                                      <button onClick={() => handlePersonDelete(person, person.id)}>delete</button>   
+                                                      </div>)
   }
 
   const handlePersonDelete = (person, id) => {
-    console.log(`Check if it works here ` + id)
+    // console.log(`Check if it works here ` + id)
     if (window.confirm(`Delete this person: ${person.name}?`)) {
       noteService
       .remove(id)
@@ -105,6 +108,28 @@ const App = () => {
   )
   }
 }
+
+  const handleUpdateExistedName = (newObject, id) => {
+    /*Not sure this is correct, because it's not automatically render after I update on the same name 
+    but anyway, will comeback in case I think of something, because the below version is not needed when 
+    we just click F5 and it will show the diff page.*/
+    if (window.confirm(`${newObject.name} is already added to phonebook, replace the old number with the new one?`)) {
+      noteService
+        .update(newObject, id)
+        .then(response => {
+          const newPersonArr = persons.map(person => {
+            if (person.id === response.id) {
+              return response
+            }
+            return person
+        })
+        setPersons(newPersonArr)
+        }) 
+        .catch(error => {
+          console.log('Error making PUT request: ', error)
+        })
+  }
+  }
 
   return (
     <div>
