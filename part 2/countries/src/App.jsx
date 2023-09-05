@@ -3,6 +3,36 @@ import axios from 'axios'
 
 const allCountries = 'https://studies.cs.helsinki.fi/restcountries/api/all'
 
+const Button = ( {country} ) => {
+  const [state, setState] = useState('show')
+  
+  const handleShowViewButton = (event) => {
+    if (state === 'show') {
+      setState('hide')
+    }
+    else {
+      setState('show')
+    }
+  }
+
+  return (
+    <div>
+      {state === 'show' ? (
+          <div>
+            <button onClick={handleShowViewButton}>{state}</button>
+          </div>
+        ) : ( 
+          <div>
+            { country.capital } { country.area } {country.continents}
+            <button onClick={handleShowViewButton}>{state}</button>
+          </div>
+        )
+      }
+    </div>
+  )
+
+}
+
 function App() {
   const [countries, setCountry] = useState([])
   const [pattern, setNewpattern] = useState('')
@@ -53,7 +83,10 @@ function App() {
     return (
       <ul>
         {countries.map((country, index) => (
-          <li key={index}>{country.name.common}</li>
+            <li key={index}>
+              {country.name.common}
+              <Button country={country} />
+            </li>
         ))}
       </ul>
     )
