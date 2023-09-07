@@ -37,6 +37,18 @@ app.get('/info', (request, response) => {
     request.startTime = new Date();
     const receivedTime = request.startTime.toLocaleString()
     response.send(`<div>Phone book has infor for ${count} people </br>${receivedTime}</div>`)
+})
+
+app.get('/api/persons/:id', (request, response) => {
+  //exercise 3.3
+  const id = request.params.id 
+  const person = persons.find(person => person.id == id)
+
+  if (person) {
+    response.json(person)
+  } else {
+    response.status(404).end()
+  }
 
 })
 
