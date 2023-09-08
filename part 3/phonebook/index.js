@@ -60,9 +60,22 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 app.post('/api/persons', (request, response) => {
-  //exercise 3.5
+  //exercise 3.5 & exercise 3.6 
   const new_person = request.body 
   const new_id = Math.floor(Math.random() * (65535)) + 1
+  const isAvailable = persons.filter(person => person.name === new_person.name)
+
+  if (!new_person.name || !new_person.number) {
+    return response.status(400).json({
+      error: "Missing name or number of a person. Check again."
+    })
+  }
+
+  if (isAvailable.length !== 0) {
+    return response.status(400).json({
+      error: "This person is already there. Check again."
+    })
+  }
   
   new_person.id = new_id 
   persons = persons.concat(new_person)
