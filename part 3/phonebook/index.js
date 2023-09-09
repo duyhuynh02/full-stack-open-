@@ -2,9 +2,23 @@ const express = require('express')
 const morgan = require('morgan')
 const app = express()
 
-//exercise 3.7 
-app.use(morgan('tiny'))
+//*exercise 3.8
+morgan.token('personNameAndNumber', (request) => {
+  const { name, number } = request.body 
+  return `{"name": "${name}", "number": "${number}"}` 
+})
+
+
+const handleMiddleware = (request, response, next) => {
+  if (request.method === 'POST') {
+    morgan(':method :url :status :response-time[3] :personNameAndNumber')(request, response, next)
+  } else {
+    morgan('tiny')(request, response, next)
+  }
+}
+
 app.use(express.json())
+app.use(handleMiddleware)
 
 let persons = [
     { 
@@ -63,6 +77,7 @@ app.delete('/api/persons/:id', (request, response) => {
   response.status(204).end()
 })
 
+
 app.post('/api/persons', (request, response) => {
   //exercise 3.5 & exercise 3.6 
   const new_person = request.body 
@@ -77,7 +92,7 @@ app.post('/api/persons', (request, response) => {
 
   if (isAvailable.length !== 0) {
     return response.status(400).json({
-      error: "This person is already there. Check again."
+      error: "This person is already there. Check again..."
     })
   }
   
@@ -87,7 +102,8 @@ app.post('/api/persons', (request, response) => {
   response.json(new_person)
 })
 
+
 const PORT = 3001 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
+    console.log(`Server running on port ${PORT}\n`)
 })
