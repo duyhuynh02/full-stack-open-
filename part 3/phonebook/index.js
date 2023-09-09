@@ -17,6 +17,7 @@ const handleMiddleware = (request, response, next) => {
   }
 }
 
+app.use(express.static('dist'))
 app.use(express.json())
 app.use(handleMiddleware)
 
