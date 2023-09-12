@@ -2,7 +2,6 @@ const express = require('express')
 const morgan = require('morgan')
 const app = express()
 
-//*exercise 3.8
 morgan.token('personNameAndNumber', (request) => {
   const { name, number } = request.body 
   return `{"name": "${name}", "number": "${number}"}` 
@@ -46,12 +45,10 @@ let persons = [
 
 
 app.get('/api/persons', (request, response) => {
-  //exercise 3.1
     response.json(persons)
 })
 
 app.get('/info', (request, response) => {
-  //exercise 3.2
     const count = Object.keys(persons).length
     request.startTime = new Date();
     const receivedTime = request.startTime.toLocaleString()
@@ -59,7 +56,6 @@ app.get('/info', (request, response) => {
 })
 
 app.get('/api/persons/:id', (request, response) => {
-  //exercise 3.3
   const id = request.params.id 
   const person = persons.find(person => person.id == id)
 
@@ -72,7 +68,6 @@ app.get('/api/persons/:id', (request, response) => {
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-  //exercise 3.4
   const id = Number(request.params.id)
   persons = persons.filter(person => person.id !== id)
   response.status(204).end()
@@ -80,7 +75,6 @@ app.delete('/api/persons/:id', (request, response) => {
 
 
 app.post('/api/persons', (request, response) => {
-  //exercise 3.5 & exercise 3.6 
   const new_person = request.body 
   const new_id = Math.floor(Math.random() * (65535)) + 1
   const isAvailable = persons.filter(person => person.name === new_person.name)
