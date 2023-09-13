@@ -51,14 +51,16 @@ app.get('/info', (request, response) => {
 })
 
 app.get('/api/persons/:id', (request, response) => {
-  const id = request.params.id 
-  const person = persons.find(person => person.id == id)
-
-  if (person) {
-    response.json(person)
-  } else {
-    response.status(404).end()
-  }
+  //ex 3.18
+  Phone.findById(request.params.id)
+    .then(result => {
+      if (result) {
+        response.json(result)
+      } else {
+        response.status(204).end()
+      }
+    })
+    .catch(error => next(error))
 
 })
 
