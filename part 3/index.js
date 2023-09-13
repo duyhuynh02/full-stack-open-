@@ -23,10 +23,10 @@ app.use(express.json())
 app.use(handleMiddleware)
 
 const errorHandler = (error, request, response, next) => {
-  console.log(error.message)
-  console.log('hello')
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
   }
 
   next(error)
@@ -74,17 +74,8 @@ app.delete('/api/persons/:id', (request, response, next) => {
 
 })
 
-app.use(errorHandler)
-
-app.post('/api/persons', (request, response) => {
-  //ex 3.14
+app.post('/api/persons', (request, response, next) => {
   const body = request.body 
-
-  if (!body.name || !body.number) {
-    return response.status(400).json({
-      error: "Missing name or number of a person. Check again."
-    })
-  }
 
   const phone = new Phone({
     name: body.name, 
@@ -94,6 +85,7 @@ app.post('/api/persons', (request, response) => {
   phone.save().then(savedPhone => {
     response.json(savedPhone)
   })
+  .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
@@ -111,6 +103,8 @@ app.put('/api/persons/:id', (request, response, next) => {
     })
     .catch(error => next(error))
 })
+
+app.use(errorHandler)
 
 
 const PORT = process.env.PORT
