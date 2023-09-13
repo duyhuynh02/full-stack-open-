@@ -32,8 +32,6 @@ const errorHandler = (error, request, response, next) => {
   next(error)
 }
 
-
-
 let persons = [
 ]
 
@@ -94,6 +92,22 @@ app.post('/api/persons', (request, response) => {
   phone.save().then(savedPhone => {
     response.json(savedPhone)
   })
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body 
+  console.log('body: ', body)
+
+  const phone = {
+    name: body.name,
+    number: body.number 
+  }
+
+  Phone.findByIdAndUpdate(request.params.id, phone, { new: true })
+    .then(updatedPhone => {
+      response.json(updatedPhone)
+    })
+    .catch(error => next(error))
 })
 
 
