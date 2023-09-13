@@ -22,6 +22,18 @@ app.use(express.static('dist'))
 app.use(express.json())
 app.use(handleMiddleware)
 
+const errorHandler = (error, request, response, next) => {
+  console.log(error.message)
+  console.log('hello')
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+
+
+
 let persons = [
 ]
 
@@ -52,15 +64,17 @@ app.get('/api/persons/:id', (request, response) => {
 
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   //ex 3.15
   Phone.findByIdAndRemove(request.params.id)
     .then(result => {
       response.status(204).end()
     })
+    .catch(error => next(error))
 
 })
 
+app.use(errorHandler)
 
 app.post('/api/persons', (request, response) => {
   //ex 3.14
