@@ -7,7 +7,8 @@ const logger = require('./utils/logger')
 const Blog = require('./models/blogs')
 const mongoose = require('mongoose')
 
-mongoose.connect(config.mongoUrl)
+
+mongoose.connect(config.MONGODB_URI)
 
 app.use(cors()) 
 app.use(express.json())
