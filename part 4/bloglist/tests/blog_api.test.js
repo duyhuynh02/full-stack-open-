@@ -46,6 +46,12 @@ describe('api testings for', () => {
 
     }, 10000)
 
+    test('id of the blog posts', async () => {
+        const response = await api.get('/api/blogs')
+
+        expect(response.body[0].id).toBeDefined() 
+    })
+
 })
 
 afterAll(async () => {
