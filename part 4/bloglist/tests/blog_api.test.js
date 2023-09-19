@@ -37,19 +37,41 @@ describe('api testings for', () => {
             .get('/api/blogs')
             .expect(200)
             .expect('Content-Type', /application\/json/)
-    }, 10000)
+    })
 
     test('all notes are returned', async () => {
         const response = await api.get('/api/blogs')
 
         expect(response.body).toHaveLength(initialBlogs.length)
 
-    }, 10000)
+    })
 
     test('id of the blog posts', async () => {
         const response = await api.get('/api/blogs')
 
         expect(response.body[0].id).toBeDefined() 
+    })
+
+    test('notes are posted successfully', async () => {
+        const newBlog = {
+            title: "Cây đổ, nhà tốc mái trong giông lốc ở TP HCM",
+            author: "Đình Văn",
+            url: "https://vnexpress.net/cay-do-nha-toc-mai-trong-giong-loc-o-tp-hcm-4655101.html",
+            likes: 3 
+        }
+
+        await api 
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+
+        const response = await api.get('/api/blogs')
+        const contents = response.body.map(b => b.title)
+
+        expect(response.body).toHaveLength(initialBlogs.length + 1)
+        expect(contents).toContain('Cây đổ, nhà tốc mái trong giông lốc ở TP HCM')
+
     })
 
 })
