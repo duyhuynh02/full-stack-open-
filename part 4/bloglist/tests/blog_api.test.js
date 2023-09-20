@@ -77,7 +77,18 @@ describe('api testings for', () => {
 
         expect(response.body).toHaveLength(initialBlogs.length + 1)
         expect(contents).toContain('Cây đổ, nhà tốc mái trong giông lốc ở TP HCM')
+    })
 
+    test('notes are missing title or url', async () => {
+        const newBlog = {
+            author: "Geshe", 
+            likes: 5
+        }
+
+        await api
+                .post('/api/blogs')
+                .send(newBlog)
+                .expect(400)
     })
 
 })
