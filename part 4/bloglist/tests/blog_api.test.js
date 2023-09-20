@@ -17,8 +17,8 @@ const initialBlogs = [
         title: "Lâm Đồng sẽ không chấp thuận dự án liên quan đến đất rừng",
         author: "Anh Tú",
         url: "https://vnexpress.net/lam-dong-se-khong-chap-thuan-du-an-lien-quan-den-dat-rung-4654182.html",
-        likes: 17
-    }
+        likes: 0
+    },
 ]
 
 beforeEach(async () => {
@@ -44,6 +44,12 @@ describe('api testings for', () => {
 
         expect(response.body).toHaveLength(initialBlogs.length)
 
+    })
+
+    test('all notes should have likes property', async () => {
+        const response = await api.get('/api/blogs')
+        expect(response.body[0]).toHaveProperty('likes')
+        expect(response.body[1]).toHaveProperty('likes')
     })
 
     test('id of the blog posts', async () => {
