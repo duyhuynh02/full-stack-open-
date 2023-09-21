@@ -94,6 +94,27 @@ describe('api testings for', () => {
         expect(titles).not.toContain(blogToDelete.title)
     })
 
+    test('blog is updated', async () => {
+        const blogs = await Blog.find({})
+        const blogToUpdateArray = blogs.map(blog => blog.toJSON())
+        const blogToUpdate = blogToUpdateArray[0]
+
+        const updatedBlog = {
+            likes: 16
+        }
+
+        await api
+            .put(`/api/blogs/${blogToUpdate.id}`)
+            .send(updatedBlog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+
+        const leftBlogs = await Blog.find({})
+        const newBlogToUpdateArray = leftBlogs.map(blog => blog.toJSON())
+        const newBlogToUpdate = newBlogToUpdateArray[0]
+        expect(newBlogToUpdate.likes).toBe(16)
+    })
+
 
     test('notes are missing title or url', async () => {
         //because with this test, we cannot post anything to the endpoint, so it
