@@ -58,6 +58,7 @@ describe('api testings for', () => {
         expect(response.body[0].id).toBeDefined() 
     })
 
+
     test('notes are posted successfully', async () => {
         const newBlog = {
             title: "Cây đổ, nhà tốc mái trong giông lốc ở TP HCM",
@@ -74,23 +75,40 @@ describe('api testings for', () => {
 
         const response = await api.get('/api/blogs')
         const contents = response.body.map(b => b.title)
-
         expect(response.body).toHaveLength(initialBlogs.length + 1)
         expect(contents).toContain('Cây đổ, nhà tốc mái trong giông lốc ở TP HCM')
     })
 
+    test('blogs are being deleted', async () => {
+        const blogs = await Blog.find({})
+        const blogToDeleteArray = blogs.map(blog => blog.toJSON())
+        const blogToDelete = blogToDeleteArray[0]
+        
+        await api 
+            .delete(`/api/blogs/${blogToDelete.id}`)
+            .expect(204)
+        
+        const leftBlogs = await Blog.find({})
+        expect(leftBlogs).toHaveLength(initialBlogs.length - 1)
+        const titles = leftBlogs.map(r => r.title)
+        expect(titles).not.toContain(blogToDelete.title)
+    })
+
+
     test('notes are missing title or url', async () => {
+        //because with this test, we cannot post anything to the endpoint, so it
+        //needs to stay at last of the test 
+        //pls suggest me if we can fix this. 
         const newBlog = {
             author: "Geshe", 
             likes: 5
         }
 
         await api
-                .post('/api/blogs')
-                .send(newBlog)
-                .expect(400)
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(400)
     })
-
 })
 
 afterAll(async () => {
