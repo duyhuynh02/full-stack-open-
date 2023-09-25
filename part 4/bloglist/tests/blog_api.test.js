@@ -5,13 +5,17 @@ const app = require('../app')
 
 const api = supertest(app)
 const Blog = require('../models/blogs')
+const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+const helper = require('./test_helper')
 
 const initialBlogs = [
     {
         title: "Ronaldo nhận sự tiếp đón chưa từng có tại Iran",
         author: "Đặng Lai",
         url: "https://tienphong.vn/ronaldo-nhan-su-tiep-don-chua-tung-co-tai-iran-post1570306.tpo",
-        likes: 32 
+        likes: 32,
+        user: "650f9b93253f8c07b6f703a9"
     },
     {
         title: "Lâm Đồng sẽ không chấp thuận dự án liên quan đến đất rừng",
@@ -32,21 +36,21 @@ beforeEach(async () => {
 
 describe('api testings for', () => {
 
-    test('notes are returned as json', async () => {
+    test('blogs are returned as json', async () => {
         await api 
             .get('/api/blogs')
             .expect(200)
             .expect('Content-Type', /application\/json/)
     })
 
-    test('all notes are returned', async () => {
+    test('all blogs are returned', async () => {
         const response = await api.get('/api/blogs')
 
         expect(response.body).toHaveLength(initialBlogs.length)
 
     })
 
-    test('all notes should have likes property', async () => {
+    test('all blogs should have likes property', async () => {
         const response = await api.get('/api/blogs')
         expect(response.body[0]).toHaveProperty('likes')
         expect(response.body[1]).toHaveProperty('likes')
@@ -59,19 +63,24 @@ describe('api testings for', () => {
     })
 
 
-    test('notes are posted successfully', async () => {
+    test('blogs are posted successfully', async () => {
         const newBlog = {
             title: "Cây đổ, nhà tốc mái trong giông lốc ở TP HCM",
             author: "Đình Văn",
             url: "https://vnexpress.net/cay-do-nha-toc-mai-trong-giong-loc-o-tp-hcm-4655101.html",
-            likes: 3 
+            likes: 3,
         }
 
-        await api 
-            .post('/api/blogs')
+        const user = await User.findOne({})
+        const token = await helper.tokenUser(user)
+
+        await api  
+            .post('/api/blogs') 
+            .set({ 'Authorization': `Bearer ${token}` })  
             .send(newBlog)
             .expect(201)
             .expect('Content-Type', /application\/json/)
+
 
         const response = await api.get('/api/blogs')
         const contents = response.body.map(b => b.title)
@@ -83,9 +92,13 @@ describe('api testings for', () => {
         const blogs = await Blog.find({})
         const blogToDeleteArray = blogs.map(blog => blog.toJSON())
         const blogToDelete = blogToDeleteArray[0]
-        
+
+        const user = await User.findById(blogToDelete.user) 
+        const token = await helper.tokenUser(user)
+
         await api 
             .delete(`/api/blogs/${blogToDelete.id}`)
+            .set({ 'Authorization': `Bearer ${token}` })  
             .expect(204)
         
         const leftBlogs = await Blog.find({})
@@ -116,10 +129,7 @@ describe('api testings for', () => {
     })
 
 
-    test('notes are missing title or url', async () => {
-        //because with this test, we cannot post anything to the endpoint, so it
-        //needs to stay at last of the test 
-        //pls suggest me if we can fix this. 
+    test('blogs are missing title or url', async () => {
         const newBlog = {
             author: "Geshe", 
             likes: 5

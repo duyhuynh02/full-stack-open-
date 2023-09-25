@@ -10,18 +10,19 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
   const body = request.body 
-  const user = request.user 
-
+  let user = request.user 
+  
+  
   if (!body.title || !body.url) {
     return response.status(400).end()
-  }
-
+  } 
+  
   const blog = new Blog({
     title: body.title,
     author: body.author, 
     url: body.url, 
     likes: body.likes, 
-    user: user.id
+    user: user.id 
   })
 
   const savedBlog = await blog.save()
@@ -38,9 +39,6 @@ blogsRouter.delete('/:id', async (request, response) => {
   if (!user || !blogToDelete.user ) {
     response.status(403).json({ 'error': 'Only user can delete it' })
   }
-
-  console.log('user: ', user)
-  console.log('blog to delete: ', blogToDelete)
 
   if (blogToDelete.user.toString() === user.id.toString()) {
     await Blog.findByIdAndRemove(request.params.id)
