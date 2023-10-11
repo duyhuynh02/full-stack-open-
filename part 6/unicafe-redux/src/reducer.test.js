@@ -14,9 +14,7 @@ describe('unicafe reducer', () => {
       type: 'DO_NOTHING'
     }
 
-    //reducer take state ban đầu, lúc này là undefied, action ở trên vừa khai báo 
     const newState = counterReducer(undefined, action)
-    //sau khi do nothing thì newState sẽ back thành initial state 
     expect(newState).toEqual(initialState)
   })
 
