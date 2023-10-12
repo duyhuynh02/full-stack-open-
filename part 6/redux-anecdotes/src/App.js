@@ -5,21 +5,20 @@ const App = () => {
   const dispatch = useDispatch()
 
   const vote = (id) => {
-    // console.log('vote', id)
     dispatch({
       type: 'VOTE', 
       payload: { id }
     })
   }
 
+  const sortAnecdote = (a, b) => {
+    return b.votes - a.votes 
+  }
+
   const addAnecdote = (event) => {
-    //set default event để nó ko tự động gửi form hoặc etc 
     event.preventDefault()
-    //lấy content của event 
     const content = event.target.anecdote.value 
-    //set cho field input trở về ban đầu, tức là rỗng '' 
     event.target.anecdote.value = ''
-    //dispatch, type là new_anecdote, payload có thể là content 
     dispatch({
       type: 'NEW_ANECDOTE', 
       payload: { content }
@@ -29,7 +28,7 @@ const App = () => {
   return (
     <div>
       <h2>Anecdotes</h2>
-      {anecdotes.map(anecdote =>
+      {anecdotes.sort(sortAnecdote).map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
