@@ -42,7 +42,8 @@ const reducer = (state = initialState, action) => {
 
     case 'VOTE': 
       const id = action.payload.id 
-      const anecdoteToChange = initialState.find(anecdote => anecdote.id === id)
+      console.log('id: ', id)
+      const anecdoteToChange = state.find(anecdote => anecdote.id === id)
       const changedAnecdote = {...anecdoteToChange, votes: ++anecdoteToChange.votes}
       return state.map(a => a.id !== id ? a : changedAnecdote)
     default:
