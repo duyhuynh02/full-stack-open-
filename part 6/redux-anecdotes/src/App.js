@@ -12,6 +12,20 @@ const App = () => {
     })
   }
 
+  const addAnecdote = (event) => {
+    //set default event để nó ko tự động gửi form hoặc etc 
+    event.preventDefault()
+    //lấy content của event 
+    const content = event.target.anecdote.value 
+    //set cho field input trở về ban đầu, tức là rỗng '' 
+    event.target.anecdote.value = ''
+    //dispatch, type là new_anecdote, payload có thể là content 
+    dispatch({
+      type: 'NEW_ANECDOTE', 
+      payload: { content }
+    })
+  }
+
   return (
     <div>
       <h2>Anecdotes</h2>
@@ -27,9 +41,9 @@ const App = () => {
         </div>
       )}
       <h2>create new</h2>
-      <form>
-        <div><input /></div>
-        <button>create</button>
+      <form onSubmit={addAnecdote}>
+        <div><input name="anecdote"/></div>
+        <button type="submit">create</button>
       </form>
     </div>
   )

@@ -23,6 +23,13 @@ const reducer = (state = initialState, action) => {
   console.log('state now: ', state)
   // console.log('action', action)
   switch (action.type) {
+    case 'NEW_ANECDOTE':
+      //pass new content vào trong asObject, assigned vào new_anecdote 
+      const new_anecdote = asObject(action.payload.content)
+      //đưa vào trong array of state, sử dụng array spread syntax 
+      return [...state, new_anecdote]
+      //return state 
+
     case 'VOTE': 
       const id = action.payload.id 
       const anecdoteToChange = initialState.find(anecdote => anecdote.id === id)
