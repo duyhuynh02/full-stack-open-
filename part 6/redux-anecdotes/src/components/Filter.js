@@ -1,12 +1,12 @@
 import { useDispatch } from 'react-redux'
-import { inputOf } from '../reducers/filterReducer'
+import { filter } from '../reducers/filterReducer'
 
 const Filter = () => {
     const dispatch = useDispatch()
 
     const handleChange = (event) => {
       const input = event.target.value 
-      dispatch(inputOf(input)) //dispatch ở đây dùng để điều hướng cho cái state thôi nhỉ 
+      dispatch(filter(input)) 
     }
 
     const style = {
