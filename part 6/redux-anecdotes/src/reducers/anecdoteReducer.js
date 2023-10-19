@@ -9,19 +9,6 @@ const anecdotesAtStart = [
   'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
 ]
 
-// export const addAnecdoteOf = (content) => {
-//   return {
-//     type: 'NEW_ANECDOTE',
-//     payload: { content }
-//   }
-// }
-
-// export const voteOf = (id) => {
-//   return {
-//     type: 'VOTE', 
-//     payload: { id }
-//   }
-// }
 
 const getId = () => (100000 * Math.random()).toFixed(0)
 
@@ -35,30 +22,12 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
-// const anecdoteReducer = (state = initialState, action) => {
-//   switch (action.type) {
-//     case 'NEW_ANECDOTE':
-//       const new_anecdote = asObject(action.payload.content)
-//       return [...state, new_anecdote]
-
-//     case 'VOTE': 
-//       const id = action.payload.id 
-//       console.log('id: ', id)
-//       const anecdoteToChange = state.find(anecdote => anecdote.id === id)
-//       const changedAnecdote = {...anecdoteToChange, votes: ++anecdoteToChange.votes}
-//       return state.map(a => a.id !== id ? a : changedAnecdote)
-//     default:
-//       return state
-//   }
-// }
-
 const anecdoteSlice = createSlice({
   name: "anecdote",
   initialState: initialState,
   reducers: {
     addAnecdoteOf(state, action) {
-      console.log('state of add: ', JSON.parse(JSON.stringify(state)))
-      console.log('action: ', action)
+      // console.log('state of add: ', JSON.parse(JSON.stringify(state)))
       const new_anecdote = asObject(action.payload)
       return [...state, new_anecdote]
     },
