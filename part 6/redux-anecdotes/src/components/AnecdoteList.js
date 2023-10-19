@@ -4,7 +4,7 @@ import { voteOf } from '../reducers/anecdoteReducer'
 const AnecdoteList = () => {
     const anecdotes = useSelector(state => {
         if ( state.filter === '' ) {
-            return state.anecdotes 
+            return [...state.anecdotes] //tạo 1 array mới bằng cách sử dụng spreading state. 
         } else {
             const new_state = state.anecdotes.filter(anecdote => anecdote.content.includes(state.filter))
             return new_state
