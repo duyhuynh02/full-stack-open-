@@ -1,8 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import anecdoteService from './services/anecdotes'
 
-import anecdoteReducer, { setAnecdotes } from './reducers/anecdoteReducer'
+import anecdoteReducer from './reducers/anecdoteReducer'
 import filterReducer from './reducers/filterReducer'
 import notificationReducer from './reducers/notificationReducer'
 
