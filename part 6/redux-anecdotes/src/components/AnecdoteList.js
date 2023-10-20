@@ -12,9 +12,9 @@ const AnecdoteList = () => {
         }
     }) 
 
-    const notification = useSelector(state => {
-        return state.notification
-    })
+    // const notification = useSelector(state => {
+    //     return state.notification
+    // })
 
     const dispatch = useDispatch()
 
