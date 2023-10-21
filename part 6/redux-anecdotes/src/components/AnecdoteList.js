@@ -5,16 +5,12 @@ import { noti } from '../reducers/notificationReducer'
 const AnecdoteList = () => {
     const anecdotes = useSelector(state => {
         if ( state.filter === '' ) {
-            return [...state.anecdotes] //tạo 1 array mới bằng cách sử dụng spreading state. 
+            return [...state.anecdotes]
         } else {
             const new_state = state.anecdotes.filter(anecdote => anecdote.content.includes(state.filter))
             return new_state
         }
     }) 
-
-    // const notification = useSelector(state => {
-    //     return state.notification
-    // })
 
     const dispatch = useDispatch()
 
