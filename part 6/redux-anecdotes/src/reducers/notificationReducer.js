@@ -5,12 +5,15 @@ const notiSlice = createSlice({
     initialState: 'Hello World!', 
     reducers: {
         noti(state, action) {
-            // console.log('action: ', action)
+            return action.payload
+        }, 
+        clearNoti(state, action) {
+            action.payload = ''
             return action.payload
         }
     }
 
 })
   
-export const { noti } = notiSlice.actions 
+export const { noti, clearNoti } = notiSlice.actions 
 export default notiSlice.reducer 

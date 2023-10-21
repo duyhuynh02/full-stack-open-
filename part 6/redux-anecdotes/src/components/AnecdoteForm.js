@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux'
 import { createNewAnecdote } from '../reducers/anecdoteReducer'
-import { noti } from '../reducers/notificationReducer'
+import { noti, clearNoti } from '../reducers/notificationReducer'
 
 const AnecdoteForm = () => {
     const dispatch = useDispatch()
@@ -10,6 +10,9 @@ const AnecdoteForm = () => {
         const content = event.target.anecdote.value 
         event.target.anecdote.value = ''
         dispatch(noti(`you created a new blog "${content}"`))
+        setTimeout(() => {
+            dispatch(clearNoti())
+        }, 5000)
         dispatch(createNewAnecdote(content))
     }
 
