@@ -1,9 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
+import { getAnecdotes } from './requests'
 
+const queryClient = new QueryClient();
 
 const App = () => {
 
@@ -13,7 +16,7 @@ const App = () => {
 
   const result = useQuery({
     queryKey: ['anecdotes'],
-    queryFn: () => axios.get('http://localhost:3001/anecdotes').then(res => res.data),
+    queryFn: getAnecdotes,
     retry: 1
   })
 
@@ -32,10 +35,12 @@ const App = () => {
   return (
     <div>
       <h3>Anecdote app</h3>
-    
+
       <Notification />
-      <AnecdoteForm />
-    
+      <QueryClientProvider client={queryClient}>
+        <AnecdoteForm />
+      </QueryClientProvider>
+
       {anecdotes.map(anecdote =>
         <div key={anecdote.id}>
           <div>
