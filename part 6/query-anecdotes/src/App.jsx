@@ -5,10 +5,21 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
 import { getAnecdotes, updateVoteAnecdote } from './requests'
+import { useReducer } from 'react'
 
 const queryClient = new QueryClient();
 
+const notiReducer = (state, action) => {
+  switch (action.type) {
+    case 'VOTE':
+      return `anecdote "${action.payload}" voted`
+    default:
+      return ''
+  }
+}
+
 const App = () => {
+  const [notification, setNotification] = useReducer(notiReducer, "")
 
   const updateVoteAnecdoteMutation = useMutation({
     mutationFn: updateVoteAnecdote,
@@ -18,6 +29,8 @@ const App = () => {
 })
 
   const handleVote = (anecdote) => {
+    setNotification({ type: 'VOTE', payload: anecdote.content })
+    setTimeout(() => setNotification({}), 5000)
     updateVoteAnecdoteMutation.mutate({...anecdote, votes: anecdote.votes + 1})
   }
 
@@ -43,7 +56,7 @@ const App = () => {
     <div>
       <h3>Anecdote app</h3>
 
-      <Notification />
+      <Notification noti={notification}/>
       <QueryClientProvider client={queryClient}>
         <AnecdoteForm />
       </QueryClientProvider>
