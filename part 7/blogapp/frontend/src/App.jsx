@@ -5,13 +5,18 @@ import BlogForm from "./components/BlogForm";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 
+import { useSelector, useDispatch } from "react-redux";
+import { setNotification } from './features/notificationSlice'
+
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
   const [user, setUser] = useState(null);
   const [blogCreateVisible, setBlogCreateVisible] = useState(false);
+
+  const message = useSelector(state => state.notification.value)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -42,9 +47,9 @@ const App = () => {
   };
 
   const helperNotification = (message) => {
-    setMessage(message);
+    dispatch(setNotification(message))
     setTimeout(() => {
-      setMessage(null);
+      dispatch(setNotification(null));
     }, 5000);
   };
 
@@ -106,7 +111,7 @@ const App = () => {
       // console.log('return blog: ', returnedBlog)
       setBlogs(blogs.concat(returnedBlog));
       helperNotification(`New blog just added by ${user.username}`);
-      window.location.reload();
+      // window.location.reload();
     });
   };
 
