@@ -1,8 +1,8 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import notificationReducer from '../features/notificationSlice'
+import blogsReducer from '../features/blogSlice'
 
-export default configureStore({
-  reducer: {
-    notification: notificationReducer
-  }
+export default combineReducers({
+    notification: notificationReducer, 
+    blogs: blogsReducer
 })

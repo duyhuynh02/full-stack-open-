@@ -7,9 +7,10 @@ import loginService from "./services/login";
 
 import { useSelector, useDispatch } from "react-redux";
 import { setNotification } from './features/notificationSlice'
+import { addBlogs } from './features/blogSlice'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
+  const blogs = useSelector(state => state.blogs)
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
@@ -18,8 +19,11 @@ const App = () => {
   const message = useSelector(state => state.notification.value)
   const dispatch = useDispatch()
 
+
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    blogService.getAll().then(blogs => {
+      dispatch(addBlogs(blogs))
+    });
   }, []);
 
   useEffect(() => {
@@ -109,7 +113,7 @@ const App = () => {
   const addBlog = (newObject) => {
     blogService.create(newObject).then((returnedBlog) => {
       // console.log('return blog: ', returnedBlog)
-      setBlogs(blogs.concat(returnedBlog));
+      addBlogs(blogs.concat(returnedBlog));
       helperNotification(`New blog just added by ${user.username}`);
       // window.location.reload();
     });
