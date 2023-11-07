@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import blogService from "../services/blogs";
 
-import { updateBlog } from "../features/blogSlice";
+import { updateBlog, deleteBlog } from "../features/blogSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const Blog = ({ blog, handleLikes }) => {
@@ -25,20 +25,14 @@ const Blog = ({ blog, handleLikes }) => {
     marginBottom: 5,
   };
 
-  const handleBlogLikes = () => {
-    const id = blog.id 
-    const currentBlog = blogs.filter(blog => blog.id === id)[0]
-    dispatch(updateBlog(currentBlog))
-    return currentBlog
-  };
-
   const handleLikesAndUpdate = () => {
-    const currentBlog = handleBlogLikes()
-    handleLikes(currentBlog);
+    dispatch(updateBlog(blog))
+    handleLikes(blog);
   };
 
   const removeBlog = () => {
     if (window.confirm("Do you really want to delete this post?")) {
+      dispatch(deleteBlog(blog))
       blogService.remove(blog);
     }
   };
