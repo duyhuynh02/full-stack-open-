@@ -1,15 +1,21 @@
 import { useState, useEffect } from "react";
 import blogService from "../services/blogs";
 
+import { updateBlog } from "../features/blogSlice";
+import { useDispatch, useSelector } from "react-redux";
+
 const Blog = ({ blog, handleLikes }) => {
   const [blogDetailVisible, setblogDetailVisible] = useState(false);
-  const [blogLikes, setBlogLikes] = useState(blog.likes + 1); //to make sure the state is catching up
   const hideBlogDetailWhenVisible = {
     display: blogDetailVisible ? "none" : "",
   };
   const showBlogDetailWhenVisible = {
     display: blogDetailVisible ? "" : "none",
   };
+
+  const blogs = useSelector(state => state.blogs)
+  // console.log('blogs: ', blogs)
+  const dispatch = useDispatch()
 
   const blogStyle = {
     paddingTop: 10,
@@ -20,21 +26,15 @@ const Blog = ({ blog, handleLikes }) => {
   };
 
   const handleBlogLikes = () => {
-    setBlogLikes(blogLikes + 1);
-    return blogLikes;
+    const id = blog.id 
+    const currentBlog = blogs.filter(blog => blog.id === id)[0]
+    dispatch(updateBlog(currentBlog))
+    return currentBlog
   };
 
   const handleLikesAndUpdate = () => {
-    const newBlog = {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: handleBlogLikes(),
-      user: blog.user,
-      id: blog.id,
-    };
-
-    handleLikes(newBlog);
+    const currentBlog = handleBlogLikes()
+    handleLikes(currentBlog);
   };
 
   const removeBlog = () => {
@@ -71,7 +71,7 @@ const Blog = ({ blog, handleLikes }) => {
           </div>
           <div>{blog.url}</div>
           <div>
-            {blogLikes}
+            {blog.likes}
             <button className="likes" onClick={handleLikesAndUpdate}>
               likes
             </button>
