@@ -8,17 +8,17 @@ import loginService from "./services/login";
 import { useSelector, useDispatch } from "react-redux";
 import { setNotification } from './features/notificationSlice'
 import { addBlogs } from './features/blogSlice'
+import { setUsername, setPassword } from "./features/userSlice";
 
 const App = () => {
   const blogs = useSelector(state => state.blogs)
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const username = useSelector(state => state.user.username)
+  const password = useSelector(state => state.user.password)
   const [user, setUser] = useState(null);
+  const message = useSelector(state => state.notification.value)
   const [blogCreateVisible, setBlogCreateVisible] = useState(false);
 
-  const message = useSelector(state => state.notification.value)
   const dispatch = useDispatch()
-
 
   useEffect(() => {
     blogService.getAll().then(blogs => {
@@ -43,8 +43,8 @@ const App = () => {
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
       blogService.setToken(user.token);
       setUser(user);
-      setUsername("");
-      setPassword("");
+      dispatch(setUsername(""));
+      dispatch(setPassword(""));
     } catch (exception) {
       helperNotification("Wrong username or password");
     }
@@ -68,7 +68,7 @@ const App = () => {
             value={username}
             name="Username"
             id="username"
-            onChange={({ target }) => setUsername(target.value)}
+            onChange={({ target }) => dispatch(setUsername(target.value))}
           />
         </div>
 
@@ -79,7 +79,7 @@ const App = () => {
             value={password}
             name="Password"
             id="password"
-            onChange={({ target }) => setPassword(target.value)}
+            onChange={({ target }) => dispatch(setPassword(target.value))}
           />
         </div>
         <button id="login-button" type="submit">
@@ -115,7 +115,6 @@ const App = () => {
       // console.log('return blog: ', returnedBlog)
       addBlogs(blogs.concat(returnedBlog));
       helperNotification(`New blog just added by ${user.username}`);
-      // window.location.reload();
     });
   };
 
@@ -129,7 +128,6 @@ const App = () => {
 
   const handleLikes = async (newBlog) => {
     blogService.update(newBlog);
-    // window.location.reload()
   };
 
   const allBlogsUser = () => {
