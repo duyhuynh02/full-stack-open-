@@ -1,15 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import Blog from "./components/Blog";
 import Notification from "./components/Notification";
 import BlogForm from "./components/BlogForm";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 
+const messageReducer = (state, action) => {
+  switch (action.type) {
+    case "ADD_MESSAGE":
+      return action.message
+    default:
+      return state 
+  }
+}
+
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useReducer(messageReducer, '')
   const [user, setUser] = useState(null);
   const [blogCreateVisible, setBlogCreateVisible] = useState(false);
 
@@ -42,8 +51,9 @@ const App = () => {
   };
 
   const helperNotification = (message) => {
-    setMessage(message);
+    setMessage({ type: 'ADD_MESSAGE', message });
     setTimeout(() => {
+      console.log('why?')
       setMessage(null);
     }, 5000);
   };
@@ -120,14 +130,12 @@ const App = () => {
 
   const handleLikes = async (newBlog) => {
     blogService.update(newBlog);
-    // window.location.reload()
   };
 
   const allBlogsUser = () => {
     const allBlogsFromUser = blogs
       .filter((blog) => blog.user && blog.user.username === user.username)
       .sort();
-    // console.log('allBlogsFromUser: ', allBlogsFromUser)
     allBlogsFromUser.sort(compareByLike);
 
     return allBlogsFromUser.map((blog) => (
