@@ -132,13 +132,6 @@ const App = () => {
   };
 
   const addBlog = (newObject) => {
-    // blogService.create(newObject).then((returnedBlog) => {
-    //   // console.log('return blog: ', returnedBlog)
-    //   // setBlogs(blogs.concat(returnedBlog));
-    //   result.mutate([...result.data, returnedBlog])
-    //   helperNotification(`New blog just added by ${user.username}`);
-    //   // window.location.reload();
-    // });
       newBlogMutation.mutate(newObject)
       helperNotification(`New blog just added by ${user.username}`)
 
@@ -152,7 +145,7 @@ const App = () => {
     }
   };
 
-  const handleLikes = async (newBlog) => {
+  const handleLikes = (newBlog) => {
     blogService.update(newBlog);
   };
 
