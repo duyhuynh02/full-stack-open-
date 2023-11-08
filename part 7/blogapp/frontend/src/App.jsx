@@ -1,4 +1,5 @@
 import { useState, useEffect, useReducer } from "react";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import Blog from "./components/Blog";
 import Notification from "./components/Notification";
 import BlogForm from "./components/BlogForm";
@@ -6,6 +7,7 @@ import blogService from "./services/blogs";
 import loginService from "./services/login";
 
 const messageReducer = (state, action) => {
+  // console.log('action type: ', action)
   switch (action.type) {
     case "ADD_MESSAGE":
       return action.message
@@ -15,16 +17,19 @@ const messageReducer = (state, action) => {
 }
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
+  // const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useReducer(messageReducer, '')
   const [user, setUser] = useState(null);
   const [blogCreateVisible, setBlogCreateVisible] = useState(false);
-
-  useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, []);
+  const queryClient = useQueryClient()
+  const newBlogMutation = useMutation({
+    mutationFn: blogService.create,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['blogs'] })
+    }
+  })
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
@@ -34,6 +39,22 @@ const App = () => {
       setUser(user);
     }
   }, []);
+
+  const result = useQuery({
+    queryKey: ['blogs'],
+    queryFn: async () => {
+      const res = await blogService.getAll()
+      // console.log('res: ', res)
+      return res
+    }
+  })
+
+  if ( result.isLoading ) {
+    return <div>loading data...</div>
+  }
+
+  const blogs = result.data
+
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -53,8 +74,7 @@ const App = () => {
   const helperNotification = (message) => {
     setMessage({ type: 'ADD_MESSAGE', message });
     setTimeout(() => {
-      console.log('why?')
-      setMessage(null);
+      setMessage({});
     }, 5000);
   };
 
@@ -112,12 +132,16 @@ const App = () => {
   };
 
   const addBlog = (newObject) => {
-    blogService.create(newObject).then((returnedBlog) => {
-      // console.log('return blog: ', returnedBlog)
-      setBlogs(blogs.concat(returnedBlog));
-      helperNotification(`New blog just added by ${user.username}`);
-      window.location.reload();
-    });
+    // blogService.create(newObject).then((returnedBlog) => {
+    //   // console.log('return blog: ', returnedBlog)
+    //   // setBlogs(blogs.concat(returnedBlog));
+    //   result.mutate([...result.data, returnedBlog])
+    //   helperNotification(`New blog just added by ${user.username}`);
+    //   // window.location.reload();
+    // });
+      newBlogMutation.mutate(newObject)
+      helperNotification(`New blog just added by ${user.username}`)
+
   };
 
   const compareByLike = (a, b) => {
