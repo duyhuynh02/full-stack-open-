@@ -16,10 +16,29 @@ const messageReducer = (state, action) => {
   }
 }
 
+const userNameReducer = (state, action) => {
+  console.log(action)
+  switch (action.type) {
+    case "CHANGE_USERNAME":
+      return action.value
+    default:
+      return state 
+  }
+}
+
+const passwordReducer = (state, action) => {
+  console.log(action)
+  switch (action.type) {
+    case "CHANGE_PASSWORD":
+      return action.value
+    default:
+      return state 
+  }
+}
+
 const App = () => {
-  // const [blogs, setBlogs] = useState([]);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useReducer(userNameReducer, '');
+  const [password, setPassword] = useReducer(passwordReducer, '');
   const [message, setMessage] = useReducer(messageReducer, '')
   const [user, setUser] = useState(null);
   const [blogCreateVisible, setBlogCreateVisible] = useState(false);
@@ -64,8 +83,8 @@ const App = () => {
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
       blogService.setToken(user.token);
       setUser(user);
-      setUsername("");
-      setPassword("");
+      setUsername({});
+      setPassword({});
     } catch (exception) {
       helperNotification("Wrong username or password");
     }
@@ -89,7 +108,7 @@ const App = () => {
             value={username}
             name="Username"
             id="username"
-            onChange={({ target }) => setUsername(target.value)}
+            onChange={({ target }) => setUsername({ type: 'CHANGE_USERNAME', value: target.value }) }
           />
         </div>
 
@@ -100,7 +119,7 @@ const App = () => {
             value={password}
             name="Password"
             id="password"
-            onChange={({ target }) => setPassword(target.value)}
+            onChange={({ target }) => setPassword({type: 'CHANGE_PASSWORD', value: target.value })}
           />
         </div>
         <button id="login-button" type="submit">
