@@ -4,11 +4,13 @@ import Notification from "./components/Notification";
 import BlogForm from "./components/BlogForm";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import usersService from "./services/users"
 
 import { useSelector, useDispatch } from "react-redux";
 import { setNotification } from './features/notificationSlice'
 import { addBlogs } from './features/blogSlice'
 import { setUsername, setPassword } from "./features/userSlice";
+import { getAllUsers } from "./features/allUsersSlice";
 
 const App = () => {
   const blogs = useSelector(state => state.blogs)
@@ -17,13 +19,13 @@ const App = () => {
   const [user, setUser] = useState(null);
   const message = useSelector(state => state.notification.value)
   const [blogCreateVisible, setBlogCreateVisible] = useState(false);
+  const allUsers = useSelector(state => state.users)
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-    blogService.getAll().then(blogs => {
-      dispatch(addBlogs(blogs))
-    });
+    blogService.getAll().then(blogs => {dispatch(addBlogs(blogs))});
+    usersService.getAll().then(users => {dispatch(getAllUsers(users))})
   }, []);
 
   useEffect(() => {
