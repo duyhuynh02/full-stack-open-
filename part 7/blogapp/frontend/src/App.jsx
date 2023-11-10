@@ -1,16 +1,24 @@
 import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import Blog from "./components/Blog";
 import Notification from "./components/Notification";
 import BlogForm from "./components/BlogForm";
+import Users from "./components/Users"
+
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import usersService from "./services/users"
 
-import { useSelector, useDispatch } from "react-redux";
 import { setNotification } from './features/notificationSlice'
 import { addBlogs } from './features/blogSlice'
 import { setUsername, setPassword } from "./features/userSlice";
 import { getAllUsers } from "./features/allUsersSlice";
+
+import {
+  BrowserRouter as Router,
+  Routes, Route, Link
+} from 'react-router-dom'
 
 const App = () => {
   const blogs = useSelector(state => state.blogs)
@@ -139,9 +147,14 @@ const App = () => {
     // console.log('allBlogsFromUser: ', allBlogsFromUser)
     allBlogsFromUser.sort(compareByLike);
 
-    return allBlogsFromUser.map((blog) => (
-      <Blog key={blog.id} blog={blog} handleLikes={handleLikes} />
-    ));
+    return (
+      <div>
+        {allBlogsFromUser.map((blog) => (
+          <Blog key={blog.id} blog={blog} handleLikes={handleLikes}/>
+        ))}
+        {blogForm()}
+      </div>
+    )
   };
 
   const removeloggedBlogappUser = () => {
@@ -149,6 +162,10 @@ const App = () => {
     helperNotification(`${user.username} just logged out`);
     window.location.reload();
   };
+  
+  const padding = {
+    padding: 5
+  }
 
   return (
     <div>
@@ -161,8 +178,18 @@ const App = () => {
             {user.name} logged in
             <button onClick={removeloggedBlogappUser}>logout</button>
           </p>
-          {allBlogsUser()}
-          {blogForm()}
+          <Router>
+            <div>
+              <Link style={padding} to="/"></Link>
+              <Link style={padding} to="/users">users</Link>
+            </div>
+
+            <Routes>
+              <Route path="/" element={allBlogsUser()}/>
+              <Route path="/users" element={<Users users={allUsers}/>}/>
+            </Routes>
+
+          </Router>
         </div>
       )}
     </div>
