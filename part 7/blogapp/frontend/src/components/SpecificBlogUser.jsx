@@ -3,7 +3,7 @@ import {
 } from 'react-router-dom'
 
 
-const SpecificBlog = ({ blogs }) => {
+const SpecificBlogUser = ({ blogs }) => {
     const id = useParams().id
     // console.log('blogs: ', blogs)
     // console.log('id: ', id)
@@ -25,5 +25,5 @@ const SpecificBlog = ({ blogs }) => {
     )
   }
   
-  export default SpecificBlog;
+  export default SpecificBlogUser;
   

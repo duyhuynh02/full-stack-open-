@@ -5,7 +5,7 @@ import Blog from "./components/Blog";
 import Notification from "./components/Notification";
 import BlogForm from "./components/BlogForm";
 import Users from "./components/Users"
-import SpecificBlog from "./components/SpecificBlog";
+import SpecificBlogUser from "./components/SpecificBlogUser";
 
 import blogService from "./services/blogs";
 import loginService from "./services/login";
@@ -191,7 +191,7 @@ const App = () => {
             </div>
 
             <Routes>
-              <Route path="/users/:id" element={<SpecificBlog blogs={blogs}/>}/>
+              <Route path="/users/:id" element={<SpecificBlogUser blogs={blogs}/>}/>
               <Route path="/" element={loggedinBlogsUser()}/>
               <Route path="/users" element={<Users users={allUsers}/>}/>
             </Routes>
