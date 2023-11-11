@@ -4,6 +4,7 @@ import blogService from "../services/blogs";
 import { updateBlog, deleteBlog } from "../features/blogSlice";
 import { useDispatch, useSelector } from "react-redux";
 
+
 const Blog = ({ blog, handleLikes }) => {
   const [blogDetailVisible, setblogDetailVisible] = useState(false);
   const hideBlogDetailWhenVisible = {
@@ -61,7 +62,8 @@ const Blog = ({ blog, handleLikes }) => {
       <div style={showBlogDetailWhenVisible}>
         <div style={blogStyle} className="blog">
           <div>
-            {blog.title} {blog.author}
+              {blog.title} 
+              {blog.author}
           </div>
           <div>{blog.url}</div>
           <div>

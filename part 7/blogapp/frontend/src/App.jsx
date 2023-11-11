@@ -6,6 +6,7 @@ import Notification from "./components/Notification";
 import BlogForm from "./components/BlogForm";
 import Users from "./components/Users"
 import SpecificBlogUser from "./components/SpecificBlogUser";
+import SpecificBlog from "./components/SpecificBlog";
 
 import blogService from "./services/blogs";
 import loginService from "./services/login";
@@ -18,7 +19,7 @@ import { getAllUsers } from "./features/allUsersSlice";
 
 import {
   BrowserRouter as Router,
-  Routes, Route, Link, useParams,
+  Routes, Route, Link, useParams, Outlet,
 } from 'react-router-dom'
 
 
@@ -134,6 +135,16 @@ const App = () => {
     });
   };
 
+  const removeloggedBlogappUser = () => {
+    window.localStorage.removeItem("loggedBlogappUser");
+    helperNotification(`${user.username} just logged out`);
+    window.location.reload();
+  };
+  
+  const padding = {
+    padding: 5
+  }
+
   const compareByLike = (a, b) => {
     if (a && b) {
       return b.likes - a.likes;
@@ -147,6 +158,7 @@ const App = () => {
   };
 
   const loggedinBlogsUser = () => {
+    //i need to refactor this function to change the layout, but i'm too lazy for that, geez. 
     const allBlogsFromUser = blogs
       .filter((blog) => blog.user && blog.user.username === user.username)
       .sort();
@@ -156,22 +168,19 @@ const App = () => {
     return (
       <div>
         {allBlogsFromUser.map((blog) => (
-          <Blog key={blog.id} blog={blog} handleLikes={handleLikes}/>
+            <div>
+              <Link to={`/blogs/${blog.id}`}>
+                <Blog key={blog.id} blog={blog} handleLikes={handleLikes}/>
+              </Link>
+            </div>
         ))}
         {blogForm()}
+      <Routes> 
+        <Route path="blogs/:id" element={<SpecificBlog blogs={allBlogsFromUser}/>}/>
+      </Routes>
       </div>
     )
   };
-
-  const removeloggedBlogappUser = () => {
-    window.localStorage.removeItem("loggedBlogappUser");
-    helperNotification(`${user.username} just logged out`);
-    window.location.reload();
-  };
-  
-  const padding = {
-    padding: 5
-  }
 
   return (
     <div>
@@ -192,7 +201,7 @@ const App = () => {
 
             <Routes>
               <Route path="/users/:id" element={<SpecificBlogUser blogs={blogs}/>}/>
-              <Route path="/" element={loggedinBlogsUser()}/>
+              <Route path="*" element={loggedinBlogsUser()}/>
               <Route path="/users" element={<Users users={allUsers}/>}/>
             </Routes>
 
