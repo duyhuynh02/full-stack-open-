@@ -1,13 +1,21 @@
+import { Link, 
+  } from 'react-router-dom'
+
 const Users = ({ users }) => {
-    // console.log('users: ', prop.users)  
-    console.log('users hihihi: ', users)
-    // console.log(users[2].blog)
+    //handle undefined value
+    if (users.length === 0) {
+        return null
+    }
+
     return (
         <div>
             <h2>Users</h2>
             <h3>Number of blogs</h3>
             {users[0].map((user) => (
-                <li key={user.id}>{user.name} {user.blogs.length}</li>
+                <li key={user.id}>
+                    <Link to={`/users/${user.id}`}>{user.name}</Link>
+                    {user.blogs.length} 
+                </li>
             ))}
         </div>
     )

@@ -5,6 +5,7 @@ import Blog from "./components/Blog";
 import Notification from "./components/Notification";
 import BlogForm from "./components/BlogForm";
 import Users from "./components/Users"
+import SpecificBlog from "./components/SpecificBlog";
 
 import blogService from "./services/blogs";
 import loginService from "./services/login";
@@ -17,8 +18,9 @@ import { getAllUsers } from "./features/allUsersSlice";
 
 import {
   BrowserRouter as Router,
-  Routes, Route, Link
+  Routes, Route, Link, useParams,
 } from 'react-router-dom'
+
 
 const App = () => {
   const blogs = useSelector(state => state.blogs)
@@ -36,6 +38,8 @@ const App = () => {
     usersService.getAll().then(users => {dispatch(getAllUsers(users))})
   }, []);
 
+  // console.log('blogs: ', blogs)
+
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
     if (loggedUserJSON) {
@@ -44,6 +48,8 @@ const App = () => {
       setUser(user);
     }
   }, []);
+
+
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -140,7 +146,7 @@ const App = () => {
     blogService.update(newBlog);
   };
 
-  const allBlogsUser = () => {
+  const loggedinBlogsUser = () => {
     const allBlogsFromUser = blogs
       .filter((blog) => blog.user && blog.user.username === user.username)
       .sort();
@@ -185,7 +191,8 @@ const App = () => {
             </div>
 
             <Routes>
-              <Route path="/" element={allBlogsUser()}/>
+              <Route path="/users/:id" element={<SpecificBlog blogs={blogs}/>}/>
+              <Route path="/" element={loggedinBlogsUser()}/>
               <Route path="/users" element={<Users users={allUsers}/>}/>
             </Routes>
 
