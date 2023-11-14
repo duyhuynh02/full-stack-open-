@@ -7,6 +7,7 @@ import BlogForm from "./components/BlogForm";
 import Users from "./components/Users"
 import SpecificBlogUser from "./components/SpecificBlogUser";
 import SpecificBlog from "./components/SpecificBlog";
+import BlogApp from "./components/BlogApp"
 
 import blogService from "./services/blogs";
 import loginService from "./services/login";
@@ -168,7 +169,7 @@ const App = () => {
     return (
       <div>
         {allBlogsFromUser.map((blog) => (
-            <div>
+            <div key={blog.id}>
               <Link to={`/blogs/${blog.id}`}>
                 <Blog key={blog.id} blog={blog} handleLikes={handleLikes}/>
               </Link>
@@ -196,12 +197,14 @@ const App = () => {
           <Router>
             <div>
               <Link style={padding} to="/"></Link>
+              <Link style={padding} to="/blogs">blogs</Link>
               <Link style={padding} to="/users">users</Link>
             </div>
 
             <Routes>
               <Route path="/users/:id" element={<SpecificBlogUser blogs={blogs}/>}/>
               <Route path="*" element={loggedinBlogsUser()}/>
+              <Route path="/blogs" element={<BlogApp blogs={blogs} user={user}/>}/>
               <Route path="/users" element={<Users users={allUsers}/>}/>
             </Routes>
 
