@@ -50,7 +50,7 @@ blogsRouter.post("/:id", async (request, response) => {
   // console.log('comment: ', comment)
 
   const savedComment = await comment.save()
-  console.log('saved comment: ', savedComment)
+  // console.log('saved comment: ', savedComment)
   blog.comments = blog.comments.concat(savedComment)
   await blog.save()
 

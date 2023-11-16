@@ -22,6 +22,12 @@ const create = async (newObject) => {
   return response.data;
 };
 
+const createComment = async (newObject) => {
+  const response = await axios.post(baseUrl + `/${newObject.blogId}`, newObject)
+  // console.log('response: ', response)
+  return response.data
+}
+
 const update = async (updatedObject) => {
   const response = await axios.put(
     baseUrl + `/${updatedObject.id}`,
@@ -39,4 +45,4 @@ const remove = async (deletedObject) => {
   return response.data;
 };
 
-export default { getAll, setToken, create, update, remove };
+export default { getAll, setToken, create, createComment, update, remove };

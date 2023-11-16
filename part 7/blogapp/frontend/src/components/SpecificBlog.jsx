@@ -1,6 +1,5 @@
-import {
-    useParams,
-} from 'react-router-dom'
+import { useParams, } from 'react-router-dom'
+import CommentForm from './CommentForm'
 
 
 const SpecificBlog = ({ blogs }) => {
@@ -29,6 +28,9 @@ const SpecificBlog = ({ blogs }) => {
             <p>{specificBlog[0].likes}</p>
             <p>added by {specificBlog[0].user.name}</p>
             <h2>Comments</h2>
+
+            <CommentForm blogPostId={id} />
+
             {comments[0].map(comment => {
                 return (
                  <li key={comment.id}>
@@ -37,6 +39,7 @@ const SpecificBlog = ({ blogs }) => {
                 )
               }
             )}
+
 
         </div>
     )
