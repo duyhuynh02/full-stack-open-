@@ -35,6 +35,8 @@ const App = () => {
 
   const dispatch = useDispatch()
 
+    // console.log('before blogs: ', blogs)
+
   useEffect(() => {
     blogService.getAll().then(blogs => {dispatch(addBlogs(blogs))});
     usersService.getAll().then(users => {dispatch(getAllUsers(users))})

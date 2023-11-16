@@ -12,19 +12,32 @@ const SpecificBlog = ({ blogs }) => {
         return null;
     }
 
-    const specificBlog = blogs.filter(blog => blog.id === id)[0]
+    const specificBlog = blogs.filter(blog => blog.id === id)
     // console.log('specific blog: ', specificBlog)
+    const comments = specificBlog.map(blog => blog.comments)
 
-    if (!specificBlog) {
+    if (!specificBlog[0] || comments.length === 0 ) {
         return null 
     }
 
+    // comments[0].map(comment => console.log(`${comment.id}: `, comment.content))
+    
     return (
         <div>
-            <h1>{specificBlog.title}</h1>
-            <p>{specificBlog.url}</p>
-            <p>{specificBlog.likes}</p>
-            <p>added by {specificBlog.user.author}</p>
+            <h1>{specificBlog[0].title}</h1>
+            <p>{specificBlog[0].url}</p>
+            <p>{specificBlog[0].likes}</p>
+            <p>added by {specificBlog[0].user.name}</p>
+            <h2>Comments</h2>
+            {comments[0].map(comment => {
+                return (
+                 <li key={comment.id}>
+                    {comment.content}
+                </li>
+                )
+              }
+            )}
+
         </div>
     )
 }
