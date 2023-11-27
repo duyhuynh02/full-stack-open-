@@ -32,7 +32,7 @@ const App = () => {
 
       <Books show={page === 'books'} books={resultBook.data.allBooks} />
 
-      <NewBook show={page === 'add'} />
+      <NewBook show={page === 'add'}/>
     </div>
   )
 }
