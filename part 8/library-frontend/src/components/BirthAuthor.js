@@ -2,9 +2,9 @@ import { useMutation } from "@apollo/client"
 import { useState } from "react"
 import { ALL_AUTHORS, CHANGE_BIRTH } from "../queries"
 
-const BirthAuthor = () => {
-    const [name, setName] = useState('')
+const BirthAuthor = (props) => {
     const [birth, setBirth] = useState(0)
+    const name = props.selectedAuthor
 
     const [ changeBirth ] = useMutation( CHANGE_BIRTH, {
         refetchQueries: [ { query: ALL_AUTHORS } ]
@@ -15,7 +15,6 @@ const BirthAuthor = () => {
         event.preventDefault()
         try {
             changeBirth({ variables: { name, birth } })
-            setName('')
             setBirth(0)
         } catch (error) {
             console.error("Mutation error: ", error)
@@ -25,14 +24,8 @@ const BirthAuthor = () => {
 
     return (
         <div>
-            <h2>change birth</h2>
+            <h2>Set birthyear</h2>
             <form onSubmit={submit}>
-                <div>
-                    name <input 
-                        value={name}
-                        onChange={({ target }) => setName(target.value)}
-                        />
-                </div>
                 <div>
                     birth <input 
                             value={birth}

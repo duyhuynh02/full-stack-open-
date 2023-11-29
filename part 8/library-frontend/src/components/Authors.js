@@ -1,11 +1,17 @@
+import { useState } from "react"
 import BirthAuthor from "./BirthAuthor"
 
+import Select from 'react-select'
+
 const Authors = (props) => {
+  const [selectedAuthor, setSelectedAuthor] = useState(props.authors[0].name); //random author to avoid null
+  
   if (!props.show) {
     return null
   }
 
   const authors = [...props.authors]
+  const options = authors.map(author => { return {value: author.name, label: author.name} })
 
   return (
     <div>
@@ -26,7 +32,11 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
-    <BirthAuthor /> 
+    <Select 
+        defaultValue={selectedAuthor}
+        onChange={setSelectedAuthor}
+        options={options}/>
+    <BirthAuthor selectedAuthor={selectedAuthor.value}/> 
     </div>
   )
 }
