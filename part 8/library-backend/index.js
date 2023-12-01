@@ -2,6 +2,27 @@ const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const { v1: uuid } = require('uuid')
 
+const mongoose = require('mongoose')
+mongoose.set('strictQuery', false)
+
+require('dotenv').config()
+
+const Author = require('./models/author')
+const Book = require('./models/book')
+
+const MONGODB_URI = process.env.MONGODB_URI
+
+console.log('connecting to', MONGODB_URI)
+
+mongoose.connect(MONGODB_URI)
+  .then(() => {
+    console.log('connected to MongoDB')
+  })
+  .catch((error) => {
+    console.log('error connection to MongoDB:', error.message)
+  })
+
+
 let authors = [
   {
     name: 'Robert Martin',
@@ -85,7 +106,7 @@ const typeDefs = `
   type Book {
     title: String!
     published: Int! 
-    author: String! 
+    author: Author! 
     id: ID! 
     genres: [String!]!
   }
@@ -112,7 +133,7 @@ const typeDefs = `
   type Mutation {
     addBook(
         title: String!
-        author: String 
+        author: String!
         published: Int!
         genres: [String!]!
     ): Book 
@@ -151,15 +172,37 @@ const resolvers = {
   },
 
   Mutation: {
-    addBook: (root, args) => {
-        const book = { ...args, id: uuid() }
+    addBook: async (root, args) => {
+        // const book = { ...args, id: uuid() }
+        // console.log('args: ', args)
         const allAuthors = books.map(book => book.author)
+        // console.log('1')
         if (!allAuthors.includes(args.author)) {
-          const new_author = {name: args.author, bookCount: 1, born: null, id: uuid()} 
-          authors = authors.concat(new_author)
+          console.log('2')
+          const newAuthor = new Author({ name: args.author })
+          console.log('2.1')
+          const book = new Book({...args, author: newAuthor._id })
+          console.log('2.2')
+          await newAuthor.save()
+          console.log('2.3')
+          await book.save()
+          console.log('2.4')
+          return book
+        } else { 
+          // console.log('3')
+          const book = new Book({...args})
+          await book.save()
+          return book
         }
-        books = books.concat(book)
-        return book
+        // console.log('book author: ', book)
+        // const allAuthors = books.map(book => book.author)
+
+        // if (!allAuthors.includes(args.author)) {
+        //   const new_author = {name: args.author, bookCount: 1, born: null, id: uuid()} 
+        //   authors = authors.concat(new_author)
+        // }
+        // books = books.concat(book)
+        // return book
     },
     editAuthor: (root, args) => {
       const author = authors.find(a => a.name === args.name)
