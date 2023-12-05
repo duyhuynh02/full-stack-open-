@@ -2,6 +2,8 @@ const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const { v1: uuid } = require('uuid')
 
+const { GraphQLError } = require("graphql")
+
 const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
 
@@ -94,9 +96,21 @@ const resolvers = {
 
   Mutation: {
     addBook: async (root, args) => {
+        console.log('args: ', args)
+        if (args.title.length < 5) {
+          throw new GraphQLError("Title of book should not be less than 5 characters", {
+            extensions: { code: 'BAD_USER_INPUT' },
+          });
+        }
+
         const existedAuthor = await Author.findOne({ name: args.author })
 
         if (existedAuthor === null) {
+          if (args.author.length < 4) {
+            throw new GraphQLError("Author's name should be at least 4 characters", {
+              extensions: { code: 'BAD_USER_INPUT' },
+            });
+          }
           const newAuthor = new Author({ name: args.author })
           await newAuthor.save()
           const book = new Book({...args, author: newAuthor })
@@ -109,23 +123,24 @@ const resolvers = {
         }
     },
     editAuthor: async (root, args) => {
-      try {
-        const author = await Author.findOne({ name: args.name })
-
-        if (!author) {
-          return null 
-        }
-
-        const filter = { _id: author._id }
-        const update = { $set: { born: args.born } }
-        const options = {
-          returnOriginal: false,
-          projection: { _id: 0, name: 1, born: 1, bookCount: 1 }
-        }
-        return Author.findOneAndUpdate(filter, update, options)
-      } catch (error) {
-        throw new Error('Something went wrong while editing the author')
+      if (args.name.length < 4) {
+        throw new GraphQLError("Author's name should be at least 4 characters", {
+          extensions: { code: 'BAD_USER_INPUT' },
+        });
       }
+      const author = await Author.findOne({ name: args.name })
+
+      if (!author) {
+        return null 
+      }
+
+      const filter = { _id: author._id }
+      const update = { $set: { born: args.born } }
+      const options = {
+        returnOriginal: false,
+        projection: { _id: 0, name: 1, born: 1, bookCount: 1 }
+      }
+      return Author.findOneAndUpdate(filter, update, options)
     }
   }
 }
