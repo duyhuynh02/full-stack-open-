@@ -2,7 +2,10 @@ import { useQuery } from '@apollo/client'
 import { ME } from '../queries'
 
 const Recommendations = (props) => {
-  const resultLoggedUser = useQuery(ME) 
+  const resultLoggedUser = useQuery(ME, {
+    //solution for working on recommendation page return null.
+    skip: !localStorage.getItem('book-user-token')
+  }) 
 
   if (!props.show) {
     return null

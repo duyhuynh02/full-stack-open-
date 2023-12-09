@@ -58,7 +58,7 @@ const App = () => {
 
       <NewBook show={page === 'add'}/>
       <Recommendations show={page === 'recommend'} 
-                        books={resultBook.data.allBooks} 
+                        books={resultBook.data.allBooks}
                             />
       <LoginForm show={page === 'login'} setToken={setToken}/> 
 
