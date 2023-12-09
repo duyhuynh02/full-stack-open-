@@ -47,7 +47,7 @@ const App = () => {
             <button onClick={() => setPage('books')}>books</button>
             <button onClick={() => setPage('add')}>add book</button>
             <button onClick={() => setPage('recommend')}>recommend</button>
-            <button onClick={logout}>log out</button>
+            <button onClick={() => logout()}>log out</button>
           </div>        
         }
 
