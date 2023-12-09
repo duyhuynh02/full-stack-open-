@@ -21,8 +21,9 @@ const LoginForm = ({ show, setToken }) => {
 
   const submit = async (event) => {
     event.preventDefault()
-
     login({ variables: { username, password } })
+    setUsername('')
+    setPassword('')
   }
 
   return (
