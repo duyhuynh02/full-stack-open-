@@ -13,6 +13,8 @@
     "typescript": "^5.3.3"
   },
   "scripts": {
-    "ts-node": "ts-node"
+    "ts-node": "ts-node",
+    "bmi": "ts-node bmiCalculator.ts",
+    "exercise": "ts-node exerciseCalculator.ts"
   }
 }
