@@ -1,3 +1,5 @@
+import { parsePeriodArguments } from "./helper";
+
 interface Result {
     periodLength: number;
     trainingDays: number; 
@@ -9,7 +11,8 @@ interface Result {
 }
 
 const calculateExercises = (dailyExerciseHoursArray: number[], target: number): Result => {
-    const periodLength = 7
+
+    const periodLength = dailyExerciseHoursArray.length 
     const trainingDays = dailyExerciseHoursArray.filter(day => day > 0).length
     const average = dailyExerciseHoursArray.reduce((a, b) => a + b, 0) / 7 
     const success = average >= target
@@ -31,6 +34,16 @@ const calculateExercises = (dailyExerciseHoursArray: number[], target: number): 
         average
     }
 
+
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
+try {
+    const { value2, value1 } = parsePeriodArguments(process.argv);
+    calculateExercises(value2, value1);
+} catch (error: unknown) {
+    let errorMessage = 'Something is not right.'
+    if (error instanceof Error) {
+        errorMessage += ' Error: ' + error.message; 
+    }
+    console.log(errorMessage)
+}
