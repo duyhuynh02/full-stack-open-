@@ -1,3 +1,5 @@
+import Part from "./Part";
+
 interface ContentProps {
     name: string; 
     exerciseCount: number; 
@@ -6,10 +8,7 @@ interface ContentProps {
 const Content = ({ courseParts }: ContentProps[]) => {
     return (
         <div>
-            {courseParts.map(course => <div key={courseParts.indexOf(course)}>
-                <p>{course.name} {course.exerciseCount}</p>
-                </div>
-            )}
+            <Part courseParts={courseParts} />
         </div>
     );
 };
