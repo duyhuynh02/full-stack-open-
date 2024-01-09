@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { getAllDiaries, createDiary } from "./diaryService";
 import { NonSensitiveDiaryEntry } from "./types";
+import Message from "./Message";
+
 
 
 const App = () => {
@@ -9,6 +11,7 @@ const App = () => {
   const [newWeather, setNewWeather] = useState('');
   const [newVisibility, setNewVisibility] = useState('');
   const [newComment, setNewComment] = useState('');
+  const [message, setNewMessage] = useState('');
 
 
   useEffect(() => {
@@ -17,7 +20,7 @@ const App = () => {
     })
   }, [])
 
-  const diaryCreation = (event: React.SyntheticEvent) => {
+  const diaryCreation = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     const diaryToAdd = {
       date: newDate, 
@@ -26,10 +29,17 @@ const App = () => {
       comment: newComment, 
     }
 
-    createDiary(diaryToAdd).then(data => {
-      setDiaries(diaries.concat(data))
-    })
-
+    try {
+      const data = await createDiary(diaryToAdd);
+      setDiaries(diaries.concat(data));
+    } catch (error) {
+      if (error instanceof Error) {
+        setNewMessage(error.message);
+        setTimeout(() => {
+          setNewMessage('');
+        }, 5000)
+      }
+    }    
     setNewDate('');
     setNewWeather('');
     setNewVisibility('');
@@ -39,6 +49,7 @@ const App = () => {
   return (
     <div>
       <h1>Add new diary</h1>
+      {message ? <Message color="red" message={message} /> : null}
       <form onSubmit={diaryCreation}>
         <ul>
           <li>
