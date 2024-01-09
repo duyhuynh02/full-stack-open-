@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import { getAllDiaries, createDiary } from "./diaryService";
 import { NonSensitiveDiaryEntry } from "./types";
 import Message from "./Message";
+import { Weather, Visibility } from "./types";
 
 
 
 const App = () => {
   const [diaries, setDiaries] = useState<NonSensitiveDiaryEntry[]>([]);
   const [newDate, setNewDate] = useState('');
-  const [newWeather, setNewWeather] = useState('');
-  const [newVisibility, setNewVisibility] = useState('');
+  const [newWeather, setNewWeather] = useState<Weather | undefined>(undefined);
+  const [newVisibility, setNewVisibility] = useState<Visibility | undefined>(undefined);
   const [newComment, setNewComment] = useState('');
   const [message, setNewMessage] = useState('');
 
@@ -41,8 +42,8 @@ const App = () => {
       }
     }    
     setNewDate('');
-    setNewWeather('');
-    setNewVisibility('');
+    setNewWeather(undefined);
+    setNewVisibility(undefined);
     setNewComment('');
   }
 
@@ -55,6 +56,7 @@ const App = () => {
           <li>
             date
             <input 
+              type="date"
               value={newDate}
               onChange={(event) => setNewDate(event.target.value)}
             />
@@ -63,17 +65,72 @@ const App = () => {
           <li>
             weather 
             <input 
-              value={newWeather}
-              onChange={(event) => setNewWeather(event.target.value)}
+              type="radio"
+              name="weather"
+              value="sunny"
+              onChange={(e) => setNewWeather(e.target.value as Weather)}
             />
+            sunny
+            <input 
+              type="radio"
+              name="weather"
+              value="rainy"
+              onChange={(e) => setNewWeather(e.target.value as Weather)}
+            />
+            rainy
+            <input 
+              type="radio"
+              name="weather"
+              value="cloudy"
+              onChange={(e) => setNewWeather(e.target.value as Weather)}
+            />
+            cloudy 
+            <input 
+              type="radio"
+              name="weather"
+              value="stormy"
+              onChange={(e) => setNewWeather(e.target.value as Weather)}
+            />
+            stormy 
+            <input 
+              type="radio"
+              name="weather"
+              value="windy"
+              onChange={(e) => setNewWeather(e.target.value as Weather)}
+            />
+            windy
           </li>
 
           <li>
             visibility
             <input 
-              value={newVisibility}
-              onChange={(event) => setNewVisibility(event.target.value)}
+              type="radio"
+              value="great"
+              name="visibility"
+              onChange={(event) => setNewVisibility(event.target.value as Visibility)}
             />
+            great 
+            <input 
+              type="radio"
+              value="good"
+              name="visibility"
+              onChange={(event) => setNewVisibility(event.target.value as Visibility)}
+            />
+            good
+            <input 
+              type="radio"
+              value="ok"
+              name="visibility"
+              onChange={(event) => setNewVisibility(event.target.value as Visibility)}
+            />
+            ok
+            <input 
+              type="radio"
+              value="poor"
+              name="visibility"
+              onChange={(event) => setNewVisibility(event.target.value as Visibility)}
+            />
+            poor  
           </li>
 
           <li>

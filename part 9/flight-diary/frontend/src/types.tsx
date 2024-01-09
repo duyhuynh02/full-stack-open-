@@ -1,4 +1,4 @@
-enum Weather {
+export enum Weather {
     Sunny = 'sunny',
     Rainy = 'rainy',
     Cloudy = 'cloudy',
