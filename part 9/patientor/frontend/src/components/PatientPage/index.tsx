@@ -13,6 +13,7 @@ const PatientPage = () => {
         const fetchPatient = async () => {
             const patient = await patientService.fetchById(id);
             setPatient(patient);
+            console.log('patient: ', patient);
         };
         void fetchPatient();
     }, [id]); // Add id as a dependency
@@ -23,8 +24,11 @@ const PatientPage = () => {
               {patient?.name ?? "unknown"}
               {patient?.gender === "male" ? <MaleSharpIcon /> : <FemaleSharpIcon />}
             </h1> 
-            <p>{patient?.ssn ?? "N/A"}</p>
-            <p>{patient?.occupation ?? "N/A"}</p>
+            <p>ssn: {patient?.ssn ?? "N/A"}</p>
+            <p>occupation: {patient?.occupation ?? "N/A"}</p>
+            <h2>entries</h2>
+            <p>{patient?.entries[0].date ?? "N/A"} {patient?.entries[0].description}</p>
+            <p>{patient?.entries[0].diagnosisCodes.map(e => <li key={e}>{e}</li>)}</p>
         </div>
     );
 };
