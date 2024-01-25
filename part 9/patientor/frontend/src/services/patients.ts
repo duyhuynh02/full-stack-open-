@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Patient, PatientFormValues } from "../types";
+import { Diagnosis, Patient, PatientFormValues } from "../types";
 
 import { apiBaseUrl } from "../constants";
 
@@ -9,6 +9,13 @@ const getAll = async () => {
   );
 
   return data;
+};
+
+const getAllDiagnosis = async () => {
+  const { data } = await axios.get<Diagnosis[]>(
+    `${apiBaseUrl}/diagnosis`
+  );
+  return data; 
 };
 
 const fetchById = async (id: string) => {
@@ -30,6 +37,7 @@ const create = async (object: PatientFormValues) => {
 export default {
   getAll, 
   create,
-  fetchById
+  fetchById,
+  getAllDiagnosis
 };
 
