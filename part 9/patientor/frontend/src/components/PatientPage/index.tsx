@@ -2,8 +2,8 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import patientService from "../../services/patients";
 import { Diagnosis, Patient } from "../../types";
-import FemaleSharpIcon from '@mui/icons-material/FemaleSharp';
-import MaleSharpIcon from '@mui/icons-material/MaleSharp';
+import { MaleSharp, FemaleSharp } from '@mui/icons-material/';
+import EntryDetails from "../EntryDetails";
 
 const PatientPage = () => {
     const { id } = useParams();
@@ -31,18 +31,18 @@ const PatientPage = () => {
         <div>
             <h1>
               {patient?.name ?? "unknown"}
-              {patient?.gender === "male" ? <MaleSharpIcon /> : <FemaleSharpIcon />}
+              {patient?.gender === "male" ? <MaleSharp /> : <FemaleSharp />}
             </h1> 
             <p>ssn: {patient?.ssn ?? "N/A"}</p>
             <p>occupation: {patient?.occupation ?? "N/A"}</p>
             <h2>entries</h2>
-            <p>{patient?.entries[0].date ?? "N/A"} {patient?.entries[0].description}</p>
-            <p>
-                {patient?.entries[0].diagnosisCodes.map(e => {
-                    const diagnosisObj = diagnosis.find(obj => obj.code === e);
-                    return diagnosisObj ? <li key={e}>{e} {diagnosisObj.name}</li> : "N/A";
-                })}
-            </p>
+            {patient?.entries.map(e => (
+                <ul key={e.id} style={{listStyleType: "none"}}>
+                    <li>{e.date} <EntryDetails entry={e}/> </li> 
+                    <li>{e.description}</li>
+                    <li>diagnosed by {e.specialist}</li> 
+                </ul>
+            ))}
         </div>
     );
 };
