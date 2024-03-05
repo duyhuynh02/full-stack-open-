@@ -63,11 +63,11 @@ const RepositoryItem = ({ item }) => {
                 </View>  
                 <View style={styles.flexThirdRow}>
                     <Text style={styles.text}>{format.format(item.stargazersCount)}</Text>
-                    <Text>Counts</Text>
+                    <Text>Stars</Text>
                 </View>  
                 <View style={styles.flexThirdRow}>
                     <Text style={styles.text}>{format.format(item.ratingAverage)}</Text>
-                    <Text>Average</Text>
+                    <Text>Ratings</Text>
                 </View>  
                 <View style={styles.flexThirdRow}>
                     <Text style={styles.text}>{format.format(item.reviewCount)}</Text>
