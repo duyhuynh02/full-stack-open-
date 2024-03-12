@@ -6,7 +6,7 @@ import theme from '../theme';
 const styles = StyleSheet.create({
   container: {
     paddingTop: Constants.statusBarHeight,
-    // flexDirection: 'row',
+    flexDirection: 'row',
     // alignItems: 'center',
     // paddingHorizontal: 16,
   },
@@ -15,23 +15,28 @@ const styles = StyleSheet.create({
     fontWeight: theme.fontWeights.bold, 
     color: "white",
     backgroundColor: '#24292e',
+    paddingHorizontal: 10,
   }, 
   scrollView: {
-    marginHorizontal: 20, 
+    // marginHorizontal: 20, 
   }
 });
 
 const AppBar = () => {
-  return <View style={styles.container}>
+  return (
+    <View style={styles.container}>
       <ScrollView horizontal style={styles.scrollView}>
         <Pressable onPress={() => {}}>
-            <Text style={styles.text}>Repositories</Text>
-            <Link to="/login">
-              <Text>Sign In</Text>
-            </Link>
+            <View style={{ flexDirection: 'row' }}>
+              <Text style={styles.text}>Repositories</Text>
+              <Link to="/login">
+                <Text style={styles.text}>Sign In</Text>
+              </Link>
+            </View>
         </Pressable>
       </ScrollView>
-    </View>;
+    </View>
+  )
 };
 
 export default AppBar;
