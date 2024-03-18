@@ -32,6 +32,7 @@ export default {
   },
   extra: {
     env: process.env.ENV, 
+    apollo: process.env.APOLLO_URI,
   }, 
 }; 
 
