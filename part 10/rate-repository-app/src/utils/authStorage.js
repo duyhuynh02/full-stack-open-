@@ -11,7 +11,7 @@ class AuthStorage {
         `${this.namespace}:accessToken`,
     ); 
 
-    return rawAccessToken ? JSON.parse(rawAccessToken) : []; 
+    return rawAccessToken ? JSON.parse(rawAccessToken) : ''; 
   }
 
   async setAccessToken(accessToken) {
@@ -31,15 +31,5 @@ class AuthStorage {
     await AsyncStorage.removeItem(`${this.namespace}:accessToken`);
   }
 }
-
-const testAuth = async() => {
-    const accessA = new AuthStorage('accessA'); 
-
-    const tokenA = await accessA.getAccessToken(); 
-
-    console.log(tokenA); 
-} 
-
-testAuth(); 
 
 export default AuthStorage;
