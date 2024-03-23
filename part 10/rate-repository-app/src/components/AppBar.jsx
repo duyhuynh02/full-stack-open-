@@ -2,6 +2,8 @@ import { View, StyleSheet, Text, Pressable, ScrollView } from 'react-native';
 import { Link } from "react-router-native";
 import Constants from 'expo-constants';
 import theme from '../theme';
+import { ME } from '../graphql/queries';
+import { useQuery } from '@apollo/client';
 
 const styles = StyleSheet.create({
   container: {
@@ -22,15 +24,23 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = () => {
+  const { data } = useQuery(ME); 
+  console.log('data: ', data);
+
   return (
     <View style={styles.container}>
       <ScrollView horizontal style={styles.scrollView}>
         <Pressable onPress={() => {}}>
             <View style={{ flexDirection: 'row' }}>
               <Text style={styles.text}>Repositories</Text>
-              <Link to="/login">
-                <Text style={styles.text}>Sign In</Text>
-              </Link>
+               {data?.me ? 
+                <Link to="/logout">
+                  <Text style={styles.text}>Sign out</Text>
+                </Link>
+                : 
+                <Link to="/login">
+                  <Text style={styles.text}>Sign In</Text>
+                </Link>}
             </View>
         </Pressable>
       </ScrollView>
