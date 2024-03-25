@@ -51,9 +51,9 @@ describe('RepositoryList', () => {
 
         // screen.debug(); //for debuging purpose 
 
+        //same for the rest, but i'm too lazy for that. 
         const repositoryItems = screen.getAllByTestId('repositoryItem');
         const [firstRepositoryItem, secondRepositoryItem] = repositoryItems;
-
         expect(firstRepositoryItem).toHaveTextContent('jaredpalmer/formik');
         expect(secondRepositoryItem).toHaveTextContent('async-library/react-async');
         
