@@ -1,6 +1,7 @@
-import { Text, View, Image, StyleSheet } from 'react-native';
+import { Text, View, Image, StyleSheet, Pressable, Button } from 'react-native';
 import theme from '../theme';
 import format from '../helper';
+import { useNavigate } from 'react-router-native';
 
 const styles = StyleSheet.create({
     flexContainer: {
@@ -41,41 +42,49 @@ const styles = StyleSheet.create({
 });
 
 
-const RepositoryItem = ({ item }) => {    
+const RepositoryItem = ({ item }) => {
+    const navigate = useNavigate();
+
+    const onPress = () => {
+        navigate(`/repository/${item.id}`)
+    }
+
     return (
-        <View testID="repositoryItem" style={styles.flexContainer}>
-            <View style={styles.flexFirstRow}>
-                <Image 
-                    style={styles.logo}
-                    source={{uri: item.ownerAvatarUrl}}
-                />
-                <View style={styles.flexSecondColumn}>
-                    <Text style={styles.text}>{item.fullName}</Text>
-                    <Text>{item.description}</Text>
-                    <Text style={styles.tag}>{item.language}</Text>
+        <Pressable onPress={onPress}>
+            <View testID="repositoryItem" style={styles.flexContainer}>
+                <View style={styles.flexFirstRow}>
+                    <Image 
+                        style={styles.logo}
+                        source={{uri: item.ownerAvatarUrl}}
+                    />
+                    <View style={styles.flexSecondColumn}>
+                        <Text style={styles.text}>{item.fullName}</Text>
+                        <Text>{item.description}</Text>
+                        <Text style={styles.tag}>{item.language}</Text>
+                    </View>
                 </View>
-            </View>
 
-            <View style={styles.flexSecondRow}>
-                <View style={styles.flexThirdRow}>
-                    <Text style={styles.text}>{format.format(item.forksCount)}</Text>
-                    <Text>Forks</Text>
-                </View>  
-                <View style={styles.flexThirdRow}>
-                    <Text style={styles.text}>{format.format(item.stargazersCount)}</Text>
-                    <Text>Stars</Text>
-                </View>  
-                <View style={styles.flexThirdRow}>
-                    <Text style={styles.text}>{format.format(item.ratingAverage)}</Text>
-                    <Text>Ratings</Text>
-                </View>  
-                <View style={styles.flexThirdRow}>
-                    <Text style={styles.text}>{format.format(item.reviewCount)}</Text>
-                    <Text>Reviews</Text>
-                </View>  
-            </View>
+                <View style={styles.flexSecondRow}>
+                    <View style={styles.flexThirdRow}>
+                        <Text style={styles.text}>{format.format(item.forksCount)}</Text>
+                        <Text>Forks</Text>
+                    </View>  
+                    <View style={styles.flexThirdRow}>
+                        <Text style={styles.text}>{format.format(item.stargazersCount)}</Text>
+                        <Text>Stars</Text>
+                    </View>  
+                    <View style={styles.flexThirdRow}>
+                        <Text style={styles.text}>{format.format(item.ratingAverage)}</Text>
+                        <Text>Ratings</Text>
+                    </View>  
+                    <View style={styles.flexThirdRow}>
+                        <Text style={styles.text}>{format.format(item.reviewCount)}</Text>
+                        <Text>Reviews</Text>
+                    </View>  
+                </View>
 
-        </View>
+            </View>
+        </Pressable>
     );
 };
 

@@ -25,14 +25,16 @@ const styles = StyleSheet.create({
 
 const AppBar = () => {
   const { data } = useQuery(ME); 
-  console.log('data: ', data);
+  // console.log('data: ', data);
 
   return (
     <View style={styles.container}>
       <ScrollView horizontal style={styles.scrollView}>
         <Pressable onPress={() => {}}>
             <View style={{ flexDirection: 'row' }}>
-              <Text style={styles.text}>Repositories</Text>
+              <Link to="/">
+                <Text style={styles.text}>Repositories</Text>
+              </Link> 
                {data?.me ? 
                 <Link to="/logout">
                   <Text style={styles.text}>Sign out</Text>
