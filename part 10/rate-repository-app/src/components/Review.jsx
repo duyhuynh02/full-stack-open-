@@ -1,6 +1,5 @@
 import { useFormik } from 'formik';
 import { View, TextInput, Pressable, StyleSheet } from 'react-native';
-import { useNavigate } from 'react-router-native';
 import Text from './Text'
 import theme from '../theme';
 import * as yup from 'yup';
@@ -101,7 +100,6 @@ export const ReviewForm = ({ onSubmit }) => {
 
 const Review = () => {
   const [createReview] = useCreateReview();
-//   const navigate = useNavigate(); 
 
   const onSubmit = async (values) => {
     const { ownerName, repositoryName, rating, review } = values; 

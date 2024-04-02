@@ -45,9 +45,15 @@ const AppBar = () => {
                   </Link>
                 </View>
                 : 
-              <Link to="/login">
-                <Text style={styles.text}>Sign In</Text>
-              </Link>}
+              <View> 
+                <Link to="/signup">
+                  <Text style={styles.text}>Sign Up</Text>
+                </Link>
+                <Link to="/login">
+                  <Text style={styles.text}>Sign In</Text>
+                </Link>
+              </View>              
+              }
                 
             </View>
         </Pressable>
