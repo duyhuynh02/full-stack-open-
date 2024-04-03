@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { StyleSheet, View, Text} from "react-native";
 import { Button, Menu, Divider, PaperProvider } from 'react-native-paper';
 
@@ -27,8 +26,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const OrderingRepositories = () => {
-    const [visible, setVisible] = useState(false); 
+const OrderingRepositories = ({ visible, setVisible, filter, setFilter }) => {
 
     const openMenu = () => setVisible(true); 
     const closeMenu = () => setVisible(false); 
@@ -44,18 +42,18 @@ const OrderingRepositories = () => {
                             </Button>
                     }>
                     <Menu.Item 
-                        onPress={() => {}} 
+                        onPress={() => setFilter('latest repositories')} 
                         title="Latest repositories"
                         style={styles.menuItem}
                     />
                     <Divider />
                     <Menu.Item 
-                        onPress={() => {}} 
+                        onPress={() => setFilter('highest rate')} 
                         title="Highest rated repositories" 
                         style={styles.menuItem}/>
                     <Divider />
                     <Menu.Item 
-                        onPress={() => {}} 
+                        onPress={() => setFilter('lowest rate')} 
                         style={styles.menuItem}
                         title="Lowest rated repositories" />   
                     
