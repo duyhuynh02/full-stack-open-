@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
         flex: 1, 
         justifyContent: 'center',
         alignContent: 'center',
-        paddingBottom: 200, //i suck with design, this is the only way i can fix right now... 
+        paddingBottom: 240, //i suck with design, this is the only way i can fix right now... 
     },
     buttonContainer: {
         paddingVertical: 12,
@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     }
 });
 
+// eslint-disable-next-line no-unused-vars
 const OrderingRepositories = ({ visible, setVisible, filter, setFilter }) => {
 
     const openMenu = () => setVisible(true); 
