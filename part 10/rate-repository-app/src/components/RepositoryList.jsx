@@ -70,7 +70,7 @@ const RepositoryList = () => {
   const { repositories, fetchMore } = useRepositories({ orderBy: orderingType, 
                                         orderDirection: orderingDirection,
                                         searchKeyword: debouncedQuery,
-                                        first: 3,
+                                        first: 8,
                                       });
 
   const onEndReach = () => {
