@@ -16,7 +16,8 @@ const ItemSeparator = () => <View style={styles.separator} />;
 
 export const RepositoryListContainer = ({ repositories, visible, setVisible, 
                                           filter, setFilter,
-                                          searchQuery, setSearchQuery 
+                                          searchQuery, setSearchQuery, 
+                                          onEndReach
                                         }) => {
   const repositoryNodes = repositories && repositories.edges
     ? repositories.edges.map(edge => edge.node)
@@ -41,6 +42,8 @@ export const RepositoryListContainer = ({ repositories, visible, setVisible,
                           </View>
                           }
       renderItem={({ item }) => <RepositoryItem item={item} /> }
+      onEndReached={onEndReach}
+      onEndReachedThreshold={0.5}
     />
   );
 };
@@ -64,10 +67,15 @@ const RepositoryList = () => {
     }
   }, [filter]);
 
-  const repositories = useRepositories({ orderBy: orderingType, 
+  const { repositories, fetchMore } = useRepositories({ orderBy: orderingType, 
                                         orderDirection: orderingDirection,
-                                        searchKeyword: debouncedQuery
+                                        searchKeyword: debouncedQuery,
+                                        first: 3,
                                       });
+
+  const onEndReach = () => {
+    fetchMore(); 
+  };                                    
 
   return (<RepositoryListContainer 
                 repositories={repositories} 
@@ -77,6 +85,7 @@ const RepositoryList = () => {
                 setFilter={setFilter}
                 searchQuery={debouncedQuery}
                 setSearchQuery={setSearchQuery}
+                onEndReach={onEndReach}
             />
   )
 };

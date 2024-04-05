@@ -2,13 +2,18 @@ import { gql } from '@apollo/client';
 
 export const GET_REPOSITORIES = gql`
   query getRepositories($orderBy: AllRepositoriesOrderBy, 
-                          $orderDirection: OrderDirection
-                           $searchKeyword: String
+                          $orderDirection: OrderDirection,
+                           $searchKeyword: String,
+                           $first: Int, 
+                           $after: String
                         ) {
     repositories(searchKeyword: $searchKeyword, 
                 orderBy: $orderBy, 
-                orderDirection: $orderDirection) {
+                orderDirection: $orderDirection, 
+                first: $first, 
+                after: $after) {
       edges {
+        cursor
         node {
           fullName 
           forksCount 
@@ -20,6 +25,10 @@ export const GET_REPOSITORIES = gql`
           reviewCount
           stargazersCount
         }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
       }
     }
   }
