@@ -37,6 +37,7 @@ export const ME = gql`
             text 
             repositoryId
             rating
+            id
             repository {
               name
             }
